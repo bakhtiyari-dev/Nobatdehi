@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using BusinessLogicLayer;
-using EntityModel;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
 {
@@ -11,42 +8,43 @@ namespace PresentationLayer.Controllers
     public class OfficeController : ControllerBase
     {
         public enum Cities
-        {   
+        {
             Azerbaijan,
             Fars,
             Isfahan,
             Qazvin,
-            Tehran,            
+            Tehran,
             Yazd,
             Zanjan
         }
 
-        [HttpGet] // GET: api/office
-        public IActionResult GetAllOffices() 
+        [HttpGet] 
+        public IActionResult GetAllOffices()
         {
             return Ok("GET ALL");
         }
 
-        [HttpGet("{id}")] // GET: api/office/{id}
-        public IActionResult GetOfficeById(int id) 
+        [HttpGet("{id}")] 
+        public IActionResult GetOfficeById(int id)
         {
             return Ok("GET ALL");
         }
 
-        [HttpPost] // POST: api/office
-        public IActionResult CreateOffice(Office office) 
+        [HttpPost] 
+        public IActionResult CreateOffice(Cities city, string phoneNumber)
         {
-            return Ok("GET ALL");
+            return Ok("Create");
         }
 
-        [HttpPut("{id}")] // PUT: api/office/{id}
-        public IActionResult UpdateOffice(int id, Office office) 
-        { 
+
+        [HttpPut("{id}")] 
+        public IActionResult UpdateOffice(int id, Cities city, string phoneNumber)
+        {
             return Ok("Update");
         }
 
-        [HttpDelete("{id}")] // DELETE: api/office/{id}
-        public IActionResult DeleteOffice(int id) 
+        [HttpDelete("{id}")] 
+        public IActionResult DeleteOffice(int id)
         {
             return Ok("Delete");
         }

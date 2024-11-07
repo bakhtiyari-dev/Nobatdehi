@@ -1,6 +1,4 @@
-﻿using EntityModel;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
 {
@@ -17,13 +15,13 @@ namespace PresentationLayer.Controllers
             ExclusiveId
         }
 
-        [HttpGet] // GET: api/Citizen
+        [HttpGet] 
         public IActionResult GetAllCitizens()
         {
             return Ok("GET ALL");
         }
 
-        [HttpGet("{id}")] // GET: api/Citizen/{id}
+        [HttpGet("{id}")] 
         public IActionResult GetCitizenById(int id = 0, IdType idType = IdType.auto)
         {
             return Ok("GET ALL");
