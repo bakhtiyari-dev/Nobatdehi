@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EntityModel
+namespace EntityModel.Offices
 {
     public class OfficePlanOption
     {

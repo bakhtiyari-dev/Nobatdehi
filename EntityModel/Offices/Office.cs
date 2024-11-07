@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 
-namespace EntityModel
+namespace EntityModel.Offices
 {
     public class Office
     {

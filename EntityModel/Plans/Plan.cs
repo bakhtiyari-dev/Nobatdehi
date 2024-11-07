@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EntityModel.Offices;
 
-namespace EntityModel
+namespace EntityModel.Plans
 {
     public class Plan
     {
