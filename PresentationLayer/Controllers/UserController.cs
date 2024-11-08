@@ -1,6 +1,4 @@
-﻿using EntityModel;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers
 {
@@ -8,31 +6,31 @@ namespace PresentationLayer.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet] // GET: api/Users
+        [HttpGet] 
         public IActionResult GetAllUsers()
         {
             return Ok("GET ALL");
         }
 
-        [HttpGet("{id}")] // GET: api/Users/{id}
+        [HttpGet("{id}")] 
         public IActionResult GetUsersById(int id)
         {
             return Ok("GET ALL");
         }
 
-        [HttpPost("{id}")] // POST: api/Users
+        [HttpPost("{id}")] 
         public IActionResult CreateUsers(int id)
         {
             return Ok("GET ALL");
         }
 
-        [HttpPut("{id}")] // PUT: api/Users/{id}
+        [HttpPut("{id}")] 
         public IActionResult UpdateUsers(int id)
         {
             return Ok("Update");
         }
 
-        [HttpDelete("{id}")] // DELETE: api/Users/{id}
+        [HttpDelete("{id}")] 
         public IActionResult DeleteUsers(int id)
         {
             return Ok("Delete");

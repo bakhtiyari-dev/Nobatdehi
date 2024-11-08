@@ -1,6 +1,4 @@
-﻿using EntityModel;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace PresentationLayer.Controllers
@@ -17,60 +15,103 @@ namespace PresentationLayer.Controllers
             ExclusiveId
         }
 
-        
-        [HttpGet(Name = "get all plans")] 
+        //Plan
+
+        [HttpGet(Name = "get all plans")]
 
         public IActionResult GetAllPlans()
         {
             return Ok("GET ALL");
         }
 
-        [HttpGet("{id}")] 
+        [HttpGet("{id}")]
         public IActionResult GetPlanById(int id)
         {
-            return Ok("GET ALL");
+            return Ok("GET");
         }
 
-        [HttpPost("{id}")] 
-        public IActionResult CreatePlan(string name, DateOnly firstDate, DateOnly lastDate, CitizenIdType citizenIdType, bool generalCreationFlag, int turnTimeGap)
+        [HttpPost("{id}")]
+        public IActionResult CreatePlan(string name, DateOnly firstDate, DateOnly lastDate, CitizenIdType citizenIdType, bool generalCreationFlag, [SwaggerParameter(Description = "set minute")] int turnTimeGap)
         {
-            return Ok("GET ALL");
+            return Ok("Create");
         }
 
-        [HttpPut("{id}")] 
-        public IActionResult UpdatePlan(int id, string name, DateOnly firstDate, DateOnly lastDate, CitizenIdType citizenIdType, bool generalCreationFlag, int turnTimeGap)
+        [HttpPut("{id}")]
+        public IActionResult UpdatePlan(int id, string name, DateOnly firstDate, DateOnly lastDate, CitizenIdType citizenIdType, bool generalCreationFlag, [SwaggerParameter(Description = "set minute")] int turnTimeGap)
         {
             return Ok("Update");
         }
 
-        [HttpDelete("{id}")] 
+        [HttpDelete("{id}")]
         public IActionResult DeletePlan(int id)
         {
             return Ok("Delete");
         }
 
-        //PlanOption Actions
+        //Capacity
 
-        [HttpPost("office-option/{id}")] 
-        public IActionResult CreateOfficePlanOption(int id)
+        [HttpPut("capacity")]
+        public IActionResult setcapacity(int officeId, int planId, string operationType, int newCapacity)
         {
             return Ok("Update");
         }
 
-        [HttpPut("office-option/{id}")] 
-        public IActionResult UpdateOfficePlanOption(int id)
+        //Dependencies
+
+        [HttpGet("dependency")]
+        public IActionResult GetAllDependencies()
+        {
+            return Ok("GET ALL");
+        }
+
+        [HttpPost("dependency")]
+        public IActionResult CreateDependency(int dependentId, int independentId)
+        {
+            return Ok("Create");
+        }
+
+        [HttpPut("dependency")]
+        public IActionResult UpdateDependency(int id, int dependentId, int independentId)
         {
             return Ok("Update");
         }
 
-        [HttpDelete("office-option")] 
-        public IActionResult DeleteOfficePlanOption(int id)
+        [HttpDelete("dependency")]
+        public IActionResult DeleteDependency(int id)
         {
             return Ok("Delete");
         }
 
-        [HttpGet("workplan")]
-        public IActionResult WeeklyHours(
+        //Office Plan Option
+
+        [HttpPost("officeOption")]
+        public IActionResult CreateOfficePlanOption(int officeId, int PlanId, DateOnly firstDate, DateOnly lastDate, int capacity)
+        {
+            return Ok("Create");
+        }
+
+        [HttpPut("officeOption")]
+        public IActionResult UpdateOfficePlanOption(int officeId, int PlanId, DateOnly firstDate, DateOnly lastDate, int capacity)
+        {
+            return Ok("Update");
+        }
+
+        [HttpDelete("officeOption")]
+        public IActionResult DeleteOfficePlanOption(int officeId, int PlanId)
+        {
+            return Ok("Delete");
+        }
+
+        //Work Plan
+
+        [HttpGet("workPlan")]
+        public IActionResult GetWorkPlan(int officeId, int PlanId)
+        {
+            return Ok("Get Office Work Plan");
+        }
+
+        [HttpPost("workPlan")]
+        public IActionResult CreateWorkPlan(int officeId, int PlanId,
             [SwaggerParameter(Description = "First hour for Saturday")] string saturdayFirstHour,
             [SwaggerParameter(Description = "Last hour for Saturday")] string saturdayLastHour,
 
@@ -94,6 +135,39 @@ namespace PresentationLayer.Controllers
         {
 
             return Ok();
+        }
+
+        [HttpPut("workPlan")]
+        public IActionResult UpdateWorkPlan(int officeId, int PlanId,
+            [SwaggerParameter(Description = "First hour for Saturday")] string saturdayFirstHour,
+            [SwaggerParameter(Description = "Last hour for Saturday")] string saturdayLastHour,
+
+            [SwaggerParameter(Description = "First hour for Sunday")] string sundayFirstHour,
+            [SwaggerParameter(Description = "Last hour for Sunday")] string sundayLastHour,
+
+            [SwaggerParameter(Description = "First hour for Monday")] string mondayFirstHour,
+            [SwaggerParameter(Description = "Last hour for Monday")] string mondayLastHour,
+
+            [SwaggerParameter(Description = "First hour for Tuesday")] string tuesdayFirstHour,
+            [SwaggerParameter(Description = "Last hour for Tuesday")] string tuesdayLastHour,
+
+            [SwaggerParameter(Description = "First hour for Wednesday")] string wednesdayFirstHour,
+            [SwaggerParameter(Description = "Last hour for Wednesday")] string wednesdayLastHour,
+
+            [SwaggerParameter(Description = "First hour for Thursday")] string thursdayFirstHour,
+            [SwaggerParameter(Description = "Last hour for Thursday")] string thursdayLastHour,
+
+            [SwaggerParameter(Description = "First hour for Friday")] string fridayFirstHour,
+            [SwaggerParameter(Description = "Last hour for Friday")] string fridayLastHour)
+        {
+
+            return Ok("Update");
+        }
+
+        [HttpDelete("workPlan")]
+        public IActionResult DeleteWorkPlan(int officeId, int PlanId)
+        {
+            return Ok("Delete");
         }
     }
 }
