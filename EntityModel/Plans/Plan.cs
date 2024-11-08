@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EntityModel.Offices;
+﻿using EntityModel.Offices;
+using EntityModel.Turns;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Plans
 {
+    [Table("Plans", Schema = "Plan")]
     public class Plan
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Status { get; set; }
 
-        public int PlanOptionId { get; set; }
+        //Relations
+
+        public List<Plan> dependentPlans { get; set; }
+        public List<Turn> Turns { get; set; }
         public List<OfficePlanOption> OfficePlanOptions { get; set; }
     }
 }

@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EntityModel.Offices;
+using EntityModel.Plans;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Turns
 {
+    [Table("Turns", Schema = "Turn")]
     public class Turn
     {
+        [Key]
         public int Id { get; set; }
         public int UserId { get; set; }
         public string CitizenIdType { get; set; }
@@ -15,8 +16,11 @@ namespace EntityModel.Turns
         public DateTime TurnTime { get; set; }
         public bool Status { get; set; }
 
-        public int CitizenId { get; set; }
-        public int OfficeId { get; set; }
-        public int PlanId { get; set; }
+        //Relations
+        
+        public Citizen Citizen { get; set; }
+        public Office Office { get; set; }
+        public Plan Plan { get; set; }
+ 
     }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EntityModel.Offices;
+using EntityModel.Plans;
+using EntityModel.Turns;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -11,21 +9,53 @@ namespace DataAccessLayer
 {
     public class DatabaseContext : IdentityDbContext<UserManager>
     {
-        public DatabaseContext(DbContextOptions options) : base(options)
+        public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
         }
 
-        protected DatabaseContext() : base()
+        //about plan
+        DbSet<Plan> Plans { get; set; }
+
+        //about office
+        DbSet<Office> Offices { get; set; }
+
+        //about option
+        DbSet<PlanOption> PlanOptions { get; set; }
+        DbSet<OfficePlanOption> OfficePlanOptions { get; set; }
+        DbSet<WeekPlan> WeekPlans { get; set; }
+
+        //about turn
+        DbSet<Turn> turns { get; set; }
+        DbSet<TurnPool> turnPools { get; set; }
+        DbSet<AvailableTurn> availableTurns { get; set; }
+
+        //about member
+        DbSet<Citizen> citizens { get; set; }
+
+        // On Model Creating Relation Set
+        //protected override void OnModelCreating(ModelBuilder builder)
+        //{
+        //    base.OnModelCreating(builder);
+        //    builder.Entity<Plan>(c =>
+        //    {
+        //        c.HasOne(c => c.PlanOption).WithOne().HasForeignKey<PlanOption>(po => po.PlanId);
+        //    });
+        //}
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.UseSqlServer(@"Server=.; Initial Catalog=Nobatdehi;User ID=loey;Password=Amir_2001; Encrypt=False");
         }
     }
 
-    public class UserManager:IdentityUser
+    public class UserManager : IdentityUser
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
         public bool Status { get; set; }
 
-        public int OfficeId { get; set; }
+        //Relations
+
+        public Office Office { get; set; }
     }
 }

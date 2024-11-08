@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Offices
 {
+    [Table("WeekPlans", Schema = "OPtion")]
     public class WeekPlan
     {
         public int Id { get; set; }
         public TimeOnly FromHour { get; set; }
         public TimeOnly ToHour { get; set; }
-        public DayOfWeek MyProperty { get; set; }
-        public int OfficeOptionPlanId { get; set; }
+        public DayOfWeek Day { get; set; }
+
+        //Relations
+        public OfficePlanOption OfficePlanOption { get; set; }
+        
     }
 }

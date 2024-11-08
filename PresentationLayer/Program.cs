@@ -1,9 +1,20 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using DataAccessLayer;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddIdentity<UserManager, IdentityRole>(c =>
+{
+    c.User.AllowedUserNameCharacters = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM";
+    c.User.RequireUniqueEmail = true;
+
+}).AddEntityFrameworkStores<DatabaseContext>();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1",

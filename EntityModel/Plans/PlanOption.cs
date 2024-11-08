@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Plans
 {
+    [Table("PlanOptions", Schema = "Option")]
     public class PlanOption
     {
+        [Key]
         public int Id { get; set; }
         public DateOnly FromDate { get; set; }
         public DateOnly ToDate { get; set; }
@@ -15,6 +14,9 @@ namespace EntityModel.Plans
         public bool GeneralCreationFlag { get; set; }
         public int TurnTimeGap { get; set; }
 
-        public int PlanId { get; set; }
+        //Relations
+
+        public Plan Plan { get; set; }
+        
     }
 }

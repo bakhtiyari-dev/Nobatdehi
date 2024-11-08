@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Turns
 {
+    [Table("AvailableTurns", Schema = "Turn")]
     public class AvailableTurn
     {
         public int Id { get; set; }
         public DateOnly AvailableTurnDate { get; set; }
         public TimeOnly AvailableTurnTime { get; set; }
 
-        public int TurnPoolId { get; set; }
+        //Relations
+        
+        public TurnPool TurnPool { get; set; }
+        
     }
 }
