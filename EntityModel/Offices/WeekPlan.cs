@@ -9,7 +9,7 @@ namespace EntityModel.Offices
         public int Id { get; set; }
         public TimeOnly FromHour { get; set; }
         public TimeOnly ToHour { get; set; }
-        public DayOfWeek Day { get; set; }
+        public byte Day { get; set; }
 
         //Relations
         public OfficePlanOption OfficePlanOption { get; set; }

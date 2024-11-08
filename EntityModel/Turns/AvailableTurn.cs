@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Turns
 {
@@ -11,8 +10,8 @@ namespace EntityModel.Turns
         public TimeOnly AvailableTurnTime { get; set; }
 
         //Relations
-        
+
         public TurnPool TurnPool { get; set; }
-        
+
     }
 }

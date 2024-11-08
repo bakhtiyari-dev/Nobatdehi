@@ -10,7 +10,7 @@ namespace EntityModel.Turns
     {
         [Key]
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public string CitizenIdType { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime TurnTime { get; set; }
