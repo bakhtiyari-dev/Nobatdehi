@@ -9,6 +9,10 @@ namespace DataAccessLayer
 {
     public class DatabaseContext : IdentityDbContext<UserManager>
     {
+        public DatabaseContext()
+        {
+        }
+
         public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
         {
         }
