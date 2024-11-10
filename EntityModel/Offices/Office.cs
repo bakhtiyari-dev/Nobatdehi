@@ -15,7 +15,7 @@ namespace EntityModel.Offices
 
         public List<Turn> Turns { get; set; }
         public List<OfficePlanOption> OfficePlanOptions { get; set; }
-        public List<string> Users { get; set; }
+        public List<string> UsersID { get; set; }
         public List<DesabledTurn> DesabledTurns { get; set; }
     }
 }

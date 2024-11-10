@@ -8,10 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddIdentity<UserManager, IdentityRole>(c =>
+builder.Services.AddIdentity<CostumIdentityUser, IdentityRole>(c =>
 {
-    c.User.AllowedUserNameCharacters = "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM";
-    c.User.RequireUniqueEmail = true;
+    c.User.AllowedUserNameCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_";
+    c.Password.RequireDigit = true;
+    c.Password.RequireLowercase = true;
+    c.Password.RequireUppercase = true;
+    c.Password.RequireNonAlphanumeric = true;
 
 }).AddEntityFrameworkStores<DatabaseContext>();
 

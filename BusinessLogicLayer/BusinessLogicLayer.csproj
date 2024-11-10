@@ -11,4 +11,8 @@
     <ProjectReference Include="..\EntityModel\EntityModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BLUsers\" />
+  </ItemGroup>
+
 </Project>

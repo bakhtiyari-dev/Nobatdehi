@@ -22,7 +22,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpGet("{id}")] 
-        public IActionResult GetCitizenById(int id = 0, IdType idType = IdType.auto)
+        public IActionResult GetCitizenById(int id = 0,[FromQuery] IdType idType = IdType.auto)
         {
             return Ok("GET ALL");
         }

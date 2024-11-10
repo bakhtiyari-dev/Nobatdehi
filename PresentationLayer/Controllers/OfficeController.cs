@@ -31,14 +31,14 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPost] 
-        public IActionResult CreateOffice(Cities city, string phoneNumber)
+        public IActionResult CreateOffice([FromQuery] Cities city, string phoneNumber)
         {
             return Ok("Create");
         }
 
 
         [HttpPut("{id}")] 
-        public IActionResult UpdateOffice(int id, Cities city, string phoneNumber)
+        public IActionResult UpdateOffice(int id,[FromQuery] Cities city, string phoneNumber)
         {
             return Ok("Update");
         }
