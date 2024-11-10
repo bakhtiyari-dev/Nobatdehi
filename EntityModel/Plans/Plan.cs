@@ -1,5 +1,6 @@
 ﻿using EntityModel.Offices;
 using EntityModel.Turns;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Plans
@@ -8,6 +9,7 @@ namespace EntityModel.Plans
     public class Plan
     {
         public int Id { get; set; }
+        [MaxLength(100)]
         public string Name { get; set; }
         public bool Status { get; set; }
 

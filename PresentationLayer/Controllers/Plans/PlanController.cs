@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace PresentationLayer.Controllers
+namespace PresentationLayer.Controllers.Plans
 {
     [Route("api/[controller]")]
     [ApiController]

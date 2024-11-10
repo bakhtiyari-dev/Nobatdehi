@@ -18,23 +18,23 @@ namespace DataAccessLayer
         }
 
         //about plan
-        DbSet<Plan> Plans { get; set; }
-
+        public DbSet<Plan> Plans { get; set; }
+        
         //about office
-        DbSet<Office> Offices { get; set; }
-
+        public DbSet<Office> Offices { get; set; }
+        
         //about option
-        DbSet<PlanOption> PlanOptions { get; set; }
-        DbSet<OfficePlanOption> OfficePlanOptions { get; set; }
-        DbSet<WeekPlan> WeekPlans { get; set; }
-
+        public DbSet<PlanOption> PlanOptions { get; set; }
+        public DbSet<OfficePlanOption> OfficePlanOptions { get; set; }
+        public DbSet<WeekPlan> WeekPlans { get; set; }
+        
         //about turn
-        DbSet<Turn> turns { get; set; }
-        DbSet<TurnPool> turnPools { get; set; }
-        DbSet<AvailableTurn> availableTurns { get; set; }
-
+        public DbSet<Turn> turns { get; set; }
+        public DbSet<TurnPool> turnPools { get; set; }
+        public DbSet<AvailableTurn> availableTurns { get; set; }
+        
         //about member
-        DbSet<Citizen> citizens { get; set; }
+        public DbSet<Citizen> citizens { get; set; }
 
         // On Model Creating Relation Set
         //protected override void OnModelCreating(ModelBuilder builder)

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PresentationLayer.Controllers
+namespace PresentationLayer.Controllers.Turns
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -15,14 +15,14 @@ namespace PresentationLayer.Controllers
             ExclusiveId
         }
 
-        [HttpGet] 
+        [HttpGet]
         public IActionResult GetAllCitizens()
         {
             return Ok("GET ALL");
         }
 
-        [HttpGet("{id}")] 
-        public IActionResult GetCitizenById(int id = 0,[FromQuery] IdType idType = IdType.auto)
+        [HttpGet("{id}")]
+        public IActionResult GetCitizenById(int id = 0, [FromQuery] IdType idType = IdType.auto)
         {
             return Ok("GET ALL");
         }

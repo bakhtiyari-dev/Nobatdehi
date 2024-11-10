@@ -12,27 +12,32 @@ namespace BusinessLogicLayer.BLOffices
 
         public void Create(EntityModel.Offices.Office office)
         {
-            throw new NotImplementedException();
+            DataAccessLayer.DLOffices.Office dlOffice = new DataAccessLayer.DLOffices.Office();
+            dlOffice.Create(office);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            DataAccessLayer.DLOffices.Office dlOffice = new DataAccessLayer.DLOffices.Office();
+            dlOffice.Delete(id);
         }
 
-        public EntityModel.Offices.Office Get(int id)
+        public EntityModel.Offices.Office? Get(int id)
         {
-            throw new NotImplementedException();
+            DataAccessLayer.DLOffices.Office dlOffice = new DataAccessLayer.DLOffices.Office();
+            return dlOffice.Get(id);
         }
 
-        public List<EntityModel.Offices.Office> GetAll()
+        public List<EntityModel.Offices.Office>? GetAll()
         {
-            throw new NotImplementedException();
+            DataAccessLayer.DLOffices.Office dlOffice = new DataAccessLayer.DLOffices.Office();
+            return dlOffice.GetAll();
         }
 
         public void Update(int id, EntityModel.Offices.Office newOffice)
         {
-            throw new NotImplementedException();
+            DataAccessLayer.DLOffices.Office dlOffice = new DataAccessLayer.DLOffices.Office();
+            dlOffice.Update(id, newOffice);
         }
     }
 }

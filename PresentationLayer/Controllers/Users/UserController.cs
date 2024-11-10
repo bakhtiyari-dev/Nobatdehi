@@ -4,7 +4,7 @@ using DataAccessLayer;
 using Microsoft.AspNetCore.Identity;
 using PresentationLayer.DTO;
 
-namespace PresentationLayer.Controllers
+namespace PresentationLayer.Controllers.Users
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,14 +18,14 @@ namespace PresentationLayer.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet] 
+        [HttpGet]
         public IEnumerable<CostumIdentityUser> GetAllUsers()
         {
             Users = _userManager.Users.ToList();
             return Users;
         }
 
-        [HttpGet("{id}")] 
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetUsersById(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -35,7 +35,7 @@ namespace PresentationLayer.Controllers
             return Ok("id: " + user.Id + "\nname: " + user.FirstName + " " + user.LastName + "\nusername: " + user.UserName);
         }
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> CreateUsers([FromQuery] UserDto model)
         {
             if (!ModelState.IsValid)
@@ -57,7 +57,7 @@ namespace PresentationLayer.Controllers
                 //add user to office user list
                 return Ok(new { message = "User created successfully!" });
             }
-                
+
             foreach (var error in result.Errors)
                 ModelState.AddModelError(string.Empty, error.Description);
 
@@ -65,7 +65,7 @@ namespace PresentationLayer.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(string id,[FromQuery] UserDto model)
+        public async Task<IActionResult> UpdateUser(string id, [FromQuery] UserDto model)
         {
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)

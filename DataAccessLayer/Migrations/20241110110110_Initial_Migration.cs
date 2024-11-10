@@ -79,10 +79,10 @@ namespace DataAccessLayer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nationality = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Passport = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Nationality = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Passport = table.Column<string>(type: "nvarchar(9)", maxLength: 9, nullable: false),
                     ExclusiveCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HouseholdCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UniqCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -99,9 +99,10 @@ namespace DataAccessLayer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UsersID = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    UsersID = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -115,7 +116,7 @@ namespace DataAccessLayer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     PlanId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -309,7 +310,7 @@ namespace DataAccessLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FromDate = table.Column<DateOnly>(type: "date", nullable: false),
                     ToDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    CitizenIdType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CitizenIdType = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     GeneralCreationFlag = table.Column<bool>(type: "bit", nullable: false),
                     TurnTimeGap = table.Column<int>(type: "int", nullable: false),
                     PlanId = table.Column<int>(type: "int", nullable: false)
