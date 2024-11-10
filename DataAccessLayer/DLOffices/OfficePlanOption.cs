@@ -1,6 +1,6 @@
 ﻿using EntityModel.Offices.Interfaces;
 
-namespace DataAccessLayer.Offices
+namespace DataAccessLayer.DLOffices
 {
     public class OfficePlanOption : IOfficePlanOption
     {

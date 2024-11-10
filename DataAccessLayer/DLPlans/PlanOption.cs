@@ -1,16 +1,15 @@
-﻿using EntityModel.Turns.Interfaces;
+﻿using EntityModel.Plans.Interfaces;
 
-namespace DataAccessLayer.Turns
+namespace DataAccessLayer.DLPlans
 {
-    public class TurnPool:ITurnPool
+    public class PlanOption:IPlanOption
     {
         private DatabaseContext _dbContext = new DatabaseContext();
-        public TurnPool()
+        public PlanOption()
         {
-            
+                
         }
-
-        public void Create(EntityModel.Turns.TurnPool turnPool)
+        public void Create(EntityModel.Plans.PlanOption planOption)
         {
             throw new NotImplementedException();
         }
@@ -20,7 +19,7 @@ namespace DataAccessLayer.Turns
             throw new NotImplementedException();
         }
 
-        public void Update(int id, EntityModel.Turns.TurnPool newTurnPool)
+        public void Update(int id, EntityModel.Plans.PlanOption newPlanOption)
         {
             throw new NotImplementedException();
         }

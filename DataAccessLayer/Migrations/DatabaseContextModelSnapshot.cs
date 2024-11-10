@@ -22,7 +22,7 @@ namespace DataAccessLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DataAccessLayer.UserManager", b =>
+            modelBuilder.Entity("DataAccessLayer.CostumIdentityUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -98,8 +98,6 @@ namespace DataAccessLayer.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("OfficeId");
-
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -119,7 +117,7 @@ namespace DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Users")
+                    b.Property<string>("UsersID")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -340,7 +338,7 @@ namespace DataAccessLayer.Migrations
 
                     b.HasIndex("PlanId");
 
-                    b.ToTable("DesabledTurn");
+                    b.ToTable("DesableTurns", "Turn");
                 });
 
             modelBuilder.Entity("EntityModel.Turns.Turn", b =>
@@ -540,17 +538,6 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DataAccessLayer.UserManager", b =>
-                {
-                    b.HasOne("EntityModel.Offices.Office", "Office")
-                        .WithMany()
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Office");
-                });
-
             modelBuilder.Entity("EntityModel.Offices.OfficePlanOption", b =>
                 {
                     b.HasOne("EntityModel.Offices.Office", "Office")
@@ -678,7 +665,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("DataAccessLayer.UserManager", null)
+                    b.HasOne("DataAccessLayer.CostumIdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -687,7 +674,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("DataAccessLayer.UserManager", null)
+                    b.HasOne("DataAccessLayer.CostumIdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -702,7 +689,7 @@ namespace DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataAccessLayer.UserManager", null)
+                    b.HasOne("DataAccessLayer.CostumIdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -711,7 +698,7 @@ namespace DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("DataAccessLayer.UserManager", null)
+                    b.HasOne("DataAccessLayer.CostumIdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

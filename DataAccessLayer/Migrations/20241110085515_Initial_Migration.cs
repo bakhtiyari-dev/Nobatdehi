@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccessLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial_Migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -93,21 +93,6 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Dependencies",
-                schema: "Option",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PlanId = table.Column<int>(type: "int", nullable: false),
-                    PlanOptionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Dependencies", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Offices",
                 schema: "Office",
                 columns: table => new
@@ -116,30 +101,11 @@ namespace DataAccessLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Users = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UsersID = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Offices", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PlanOptions",
-                schema: "Option",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FromDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    ToDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    CitizenIdType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GeneralCreationFlag = table.Column<bool>(type: "bit", nullable: false),
-                    TurnTimeGap = table.Column<int>(type: "int", nullable: false),
-                    PlanId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PlanOptions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -151,63 +117,17 @@ namespace DataAccessLayer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    PlanOptionId = table.Column<int>(type: "int", nullable: false)
+                    PlanId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Plans", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TurnPools",
-                schema: "Turn",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OfficePlanOptionId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TurnPools", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Turns",
-                schema: "Turn",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    CitizenIdType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TurnTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    CitizenId = table.Column<int>(type: "int", nullable: false),
-                    OfficeId = table.Column<int>(type: "int", nullable: false),
-                    PlanId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Turns", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WeekPlans",
-                schema: "OPtion",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FromHour = table.Column<TimeOnly>(type: "time", nullable: false),
-                    ToHour = table.Column<TimeOnly>(type: "time", nullable: false),
-                    Day = table.Column<int>(type: "int", nullable: false),
-                    OfficeOptionPlanId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WeekPlans", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Plans_Plans_PlanId",
+                        column: x => x.PlanId,
+                        principalSchema: "Plan",
+                        principalTable: "Plans",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -317,6 +237,37 @@ namespace DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DesableTurns",
+                schema: "Turn",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Day = table.Column<DateOnly>(type: "date", nullable: false),
+                    Hour = table.Column<TimeOnly>(type: "time", nullable: false),
+                    PlanId = table.Column<int>(type: "int", nullable: false),
+                    OfficeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesableTurns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DesableTurns_Offices_OfficeId",
+                        column: x => x.OfficeId,
+                        principalSchema: "Office",
+                        principalTable: "Offices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DesableTurns_Plans_PlanId",
+                        column: x => x.PlanId,
+                        principalSchema: "Plan",
+                        principalTable: "Plans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OfficePlanOptions",
                 schema: "Option",
                 columns: table => new
@@ -328,9 +279,7 @@ namespace DataAccessLayer.Migrations
                     Capacity = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     OfficeId = table.Column<int>(type: "int", nullable: false),
-                    PlanId = table.Column<int>(type: "int", nullable: false),
-                    WeekPlanId = table.Column<int>(type: "int", nullable: false),
-                    TurnPoolId = table.Column<int>(type: "int", nullable: false)
+                    PlanId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -347,6 +296,119 @@ namespace DataAccessLayer.Migrations
                         column: x => x.PlanId,
                         principalSchema: "Plan",
                         principalTable: "Plans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlanOptions",
+                schema: "Option",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FromDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    ToDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    CitizenIdType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GeneralCreationFlag = table.Column<bool>(type: "bit", nullable: false),
+                    TurnTimeGap = table.Column<int>(type: "int", nullable: false),
+                    PlanId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlanOptions_Plans_PlanId",
+                        column: x => x.PlanId,
+                        principalSchema: "Plan",
+                        principalTable: "Plans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Turns",
+                schema: "Turn",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CitizenIdType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TurnTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    CitizenId = table.Column<int>(type: "int", nullable: false),
+                    OfficeId = table.Column<int>(type: "int", nullable: false),
+                    PlanId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Turns", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Turns_Citizens_CitizenId",
+                        column: x => x.CitizenId,
+                        principalSchema: "Member",
+                        principalTable: "Citizens",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Turns_Offices_OfficeId",
+                        column: x => x.OfficeId,
+                        principalSchema: "Office",
+                        principalTable: "Offices",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Turns_Plans_PlanId",
+                        column: x => x.PlanId,
+                        principalSchema: "Plan",
+                        principalTable: "Plans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TurnPools",
+                schema: "Turn",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OfficePlanOptionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TurnPools", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TurnPools_OfficePlanOptions_OfficePlanOptionId",
+                        column: x => x.OfficePlanOptionId,
+                        principalSchema: "Option",
+                        principalTable: "OfficePlanOptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WeekPlans",
+                schema: "OPtion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FromHour = table.Column<TimeOnly>(type: "time", nullable: false),
+                    ToHour = table.Column<TimeOnly>(type: "time", nullable: false),
+                    Day = table.Column<byte>(type: "tinyint", nullable: false),
+                    OfficePlanOptionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WeekPlans", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WeekPlans_OfficePlanOptions_OfficePlanOptionId",
+                        column: x => x.OfficePlanOptionId,
+                        principalSchema: "Option",
+                        principalTable: "OfficePlanOptions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -420,6 +482,18 @@ namespace DataAccessLayer.Migrations
                 column: "TurnPoolId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DesableTurns_OfficeId",
+                schema: "Turn",
+                table: "DesableTurns",
+                column: "OfficeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesableTurns_PlanId",
+                schema: "Turn",
+                table: "DesableTurns",
+                column: "PlanId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OfficePlanOptions_OfficeId",
                 schema: "Option",
                 table: "OfficePlanOptions",
@@ -430,6 +504,48 @@ namespace DataAccessLayer.Migrations
                 schema: "Option",
                 table: "OfficePlanOptions",
                 column: "PlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlanOptions_PlanId",
+                schema: "Option",
+                table: "PlanOptions",
+                column: "PlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Plans_PlanId",
+                schema: "Plan",
+                table: "Plans",
+                column: "PlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TurnPools_OfficePlanOptionId",
+                schema: "Turn",
+                table: "TurnPools",
+                column: "OfficePlanOptionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turns_CitizenId",
+                schema: "Turn",
+                table: "Turns",
+                column: "CitizenId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turns_OfficeId",
+                schema: "Turn",
+                table: "Turns",
+                column: "OfficeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Turns_PlanId",
+                schema: "Turn",
+                table: "Turns",
+                column: "PlanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WeekPlans_OfficePlanOptionId",
+                schema: "OPtion",
+                table: "WeekPlans",
+                column: "OfficePlanOptionId");
         }
 
         /// <inheritdoc />
@@ -455,16 +571,8 @@ namespace DataAccessLayer.Migrations
                 schema: "Turn");
 
             migrationBuilder.DropTable(
-                name: "Citizens",
-                schema: "Member");
-
-            migrationBuilder.DropTable(
-                name: "Dependencies",
-                schema: "Option");
-
-            migrationBuilder.DropTable(
-                name: "OfficePlanOptions",
-                schema: "Option");
+                name: "DesableTurns",
+                schema: "Turn");
 
             migrationBuilder.DropTable(
                 name: "PlanOptions",
@@ -487,6 +595,14 @@ namespace DataAccessLayer.Migrations
             migrationBuilder.DropTable(
                 name: "TurnPools",
                 schema: "Turn");
+
+            migrationBuilder.DropTable(
+                name: "Citizens",
+                schema: "Member");
+
+            migrationBuilder.DropTable(
+                name: "OfficePlanOptions",
+                schema: "Option");
 
             migrationBuilder.DropTable(
                 name: "Offices",

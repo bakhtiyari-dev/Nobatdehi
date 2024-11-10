@@ -1,6 +1,6 @@
 ﻿using EntityModel.Offices.Interfaces;
 
-namespace DataAccessLayer.Methods
+namespace DataAccessLayer.DLOffices
 {
     public class Office:IOffice
     {

@@ -1,6 +1,6 @@
 ﻿using EntityModel.Turns.Interfaces;
 
-namespace DataAccessLayer.Turns
+namespace DataAccessLayer.DLTurns
 {
     public class AvailableTurn:IAvailableTurn
     {

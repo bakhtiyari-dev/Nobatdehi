@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer
 {
-    public class DatabaseContext : IdentityDbContext<UserManager>
+    public class DatabaseContext : IdentityDbContext<CostumIdentityUser>
     {
         public DatabaseContext()
         {
@@ -52,7 +52,7 @@ namespace DataAccessLayer
         }
     }
 
-    public class UserManager : IdentityUser
+    public class CostumIdentityUser : IdentityUser
     {
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
@@ -60,6 +60,6 @@ namespace DataAccessLayer
 
         //Relations
 
-        public Office Office { get; set; }
+        public int OfficeId { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using EntityModel.Plans.Interfaces;
 
-namespace DataAccessLayer.Plans
+namespace DataAccessLayer.DLPlans
 {
     public class Plan:IPlan
     {

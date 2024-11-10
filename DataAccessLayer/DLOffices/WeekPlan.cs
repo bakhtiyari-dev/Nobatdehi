@@ -1,14 +1,13 @@
 ﻿using EntityModel.Offices.Interfaces;
-using Microsoft.Identity.Client.Extensibility;
 
-namespace DataAccessLayer.Offices
+namespace DataAccessLayer.OffDLOfficesces
 {
     public class WeekPlan : IWeekPlan
     {
-        private DatabaseContext _dbContext=new DatabaseContext();
+        private DatabaseContext _dbContext = new DatabaseContext();
         public WeekPlan()
         {
-                
+
         }
         public void Create(EntityModel.Offices.WeekPlan weekPlan)
         {
