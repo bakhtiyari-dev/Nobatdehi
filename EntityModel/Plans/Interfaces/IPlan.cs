@@ -2,10 +2,13 @@
 {
     public interface IPlan
     {
-        public void Create(Plan plan);
-        public void Update(int id, Plan newPlan);
+        public void Create(Plan plan, PlanOption planOption);
+        public void Update(int id, Plan newPlan, PlanOption newPlanOption);
         public void Delete(int id);
-        public List<Plan> GetAll();
-        public Plan Get(int id);
+        public IQueryable? GetAll();
+        public IQueryable? Get(int id);
+        public bool IsExist(int id);
+        public Plan? GetPlan(int id);
+        public PlanOption? GetPlanOption(int id);
     }
 }

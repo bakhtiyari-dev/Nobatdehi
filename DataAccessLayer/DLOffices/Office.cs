@@ -46,10 +46,9 @@ namespace DataAccessLayer.DLOffices
             {
                 office.PhoneNumber = newOffice.PhoneNumber;
                 office.City = newOffice.City;
+                _dbContext.Offices.Update(office);
+                _dbContext.SaveChanges();
             }
-
-            _dbContext.Offices.Update(office);
-            _dbContext.SaveChanges();
         }
     }
 }

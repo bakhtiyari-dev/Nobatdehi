@@ -6,34 +6,50 @@ namespace BusinessLogicLayer.BLPlans
     public class Plan:IPlan
     {
         private DatabaseContext _dbContext = new DatabaseContext();
+        private DataAccessLayer.DLPlans.Plan _dlPlan;
         public Plan()
         {
-                
+            _dlPlan = new DataAccessLayer.DLPlans.Plan();
         }
 
-        public void Create(EntityModel.Plans.Plan plan)
+        public void Create(EntityModel.Plans.Plan plan, EntityModel.Plans.PlanOption planOption)
         {
-            throw new NotImplementedException();
+            _dlPlan.Create(plan, planOption);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _dlPlan.Delete(id);
         }
 
-        public EntityModel.Plans.Plan Get(int id)
+        public IQueryable? Get(int id)
         {
-            throw new NotImplementedException();
+            return _dlPlan.Get(id);
         }
 
-        public List<EntityModel.Plans.Plan> GetAll()
+        public IQueryable? GetAll()
         {
-            throw new NotImplementedException();
+            return _dlPlan.GetAll();
         }
 
-        public void Update(int id, EntityModel.Plans.Plan newPlan)
+        public void Update(int id, EntityModel.Plans.Plan newPlan, EntityModel.Plans.PlanOption newPlanOption)
         {
-            throw new NotImplementedException();
+            _dlPlan.Update(id, newPlan, newPlanOption);
+        }
+
+        public bool IsExist(int id)
+        {
+            return _dlPlan.IsExist(id);
+        }
+
+        public EntityModel.Plans.Plan? GetPlan(int id)
+        {
+            return _dlPlan.GetPlan(id);
+        }
+
+        public EntityModel.Plans.PlanOption? GetPlanOption(int id)
+        {
+            return _dlPlan.GetPlanOption(id);
         }
     }
 }
