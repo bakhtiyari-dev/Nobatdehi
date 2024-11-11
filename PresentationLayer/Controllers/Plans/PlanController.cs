@@ -111,28 +111,44 @@ namespace PresentationLayer.Controllers.Plans
 
         //Dependencies
 
-        [HttpGet("dependency")]
-        public IActionResult GetAllDependencies()
+        [HttpGet("dependency/{id}")]
+        public IQueryable? GetDependency(int id)
         {
-            return Ok("GET ALL");
+            return _blPlan.GetDependency(id) ?? $"Error: not find any dependencies for plan with this id ({id})".AsQueryable();
+        }
+
+        [HttpGet("dependency")]
+        public IQueryable? GetAllDependencies()
+        {
+            return _blPlan.GetAllDependencies() ?? $"Error: not find any plan dependencies".AsQueryable();
         }
 
         [HttpPost("dependency")]
-        public IActionResult CreateDependency(int dependentId, int independentId)
+        public IQueryable? CreateDependency(int independentId, int dependentId)
         {
-            return Ok("Create");
-        }
-
-        [HttpPut("dependency")]
-        public IActionResult UpdateDependency(int id, int dependentId, int independentId)
-        {
-            return Ok("Update");
+            if (!_blPlan.CheckConflict(independentId, dependentId))
+            {
+                _blPlan.CreateDependency(independentId, dependentId);
+            }
+            else
+            {
+                return $"Error: this action make conflict in dependencies !".AsQueryable();
+            }
+            return _blPlan.GetDependency(independentId) ?? $"Error: not find any dependencies for plan with this id ({independentId})".AsQueryable();   
         }
 
         [HttpDelete("dependency")]
-        public IActionResult DeleteDependency(int id)
+        public IQueryable? DeleteDependency(int independentId, int dependentId)
         {
-            return Ok("Delete");
+            if (_blPlan.CheckExist(independentId, dependentId))
+            {
+                _blPlan.DeleteDependency(independentId, dependentId);
+            }
+            else
+            {
+                return $"Error: Both plans must be available !".AsQueryable();
+            }
+            return _blPlan.GetAllDependencies() ?? $"Error: not find any plan dependencies".AsQueryable();
         }
 
         //Office Plan Option

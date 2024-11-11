@@ -36,15 +36,18 @@ namespace DataAccessLayer
         //about member
         public DbSet<Citizen> citizens { get; set; }
 
-        // On Model Creating Relation Set
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
-        //    builder.Entity<Plan>(c =>
-        //    {
-        //        c.HasOne(c => c.PlanOption).WithOne().HasForeignKey<PlanOption>(po => po.PlanId);
-        //    });
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Plan>()
+                .HasMany(c => c.dependentPlans)
+                .WithMany(c => c.headPlans)
+                .UsingEntity<Dictionary<string, object>>(
+                    "PlanDependencies",
+                    j => j.HasOne<Plan>().WithMany().HasForeignKey("Dependencies"),
+                    j => j.HasOne<Plan>().WithMany().HasForeignKey("PlanId"));
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

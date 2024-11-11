@@ -1,8 +1,9 @@
 ﻿using EntityModel.Plans.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLPlans
 {
-    public class Plan:IPlan
+    public class Plan:IPlan,IPlanDependency, IPlanHelper
     {
         private DatabaseContext _dbContext = new DatabaseContext();
         public Plan()
@@ -108,6 +109,125 @@ namespace DataAccessLayer.DLPlans
         public EntityModel.Plans.PlanOption? GetPlanOption(int id)
         {
             return _dbContext.PlanOptions.FirstOrDefault(p => p.Id == id);
+        }
+
+
+        // DAL : Plan Dependencies
+
+
+        public void CreateDependency(int inDependentId, int dependentId)
+        {
+            var indep = _dbContext.Plans.FirstOrDefault(p => p.Id == inDependentId);
+            var dep = _dbContext.Plans.FirstOrDefault(d => d.Id == dependentId);
+
+            if (indep != null && dep != null)
+            {
+                indep.dependentPlans.Add(dep);
+                dep.headPlans.Add(indep);
+                _dbContext.Plans.Update(indep);
+                _dbContext.Plans.Update(dep);
+                _dbContext.SaveChangesAsync();
+            }
+
+        }
+
+        public void DeleteDependency(int inDependentId, int dependentId)
+        {
+            var indept = _dbContext.Plans.Where(i => i.Id == inDependentId).Include(d => d.dependentPlans).Single();
+
+            if (indept != null)
+            {
+                
+                var dependent = indept.dependentPlans.FirstOrDefault(d => d.Id == dependentId);
+
+                if (dependent != null)
+                {   
+                    indept.dependentPlans.Remove(dependent);
+                    _dbContext.Plans.Update(indept);
+                    _dbContext.SaveChanges();
+                }
+            }
+        }
+
+        public IQueryable? GetDependency(int id)
+        {
+            var indept = _dbContext.Plans.Where(i => i.Id == id).Include(d => d.dependentPlans).Select(s => new
+            {
+                s.Id,
+                s.Name,
+                dependencies = s.dependentPlans.Select(d => new
+                {
+                    d.Id,
+                    d.Name
+                })
+            });
+
+            return indept;
+        }
+
+        public IQueryable? GetAllDependencies()
+        {
+            var dependencies = _dbContext.Plans.Select(p => new
+            {
+                p.Id,
+                p.Name,
+                Dependencies = p.dependentPlans.Select(d => new
+                {
+                    d.Id,
+                    d.Name
+                })
+            }).AsQueryable();
+
+            return dependencies;
+        }
+
+        public bool CheckConflict(int independentId, int dependentId)
+        {
+            var indept = _dbContext.Plans.FirstOrDefault(c => c.Id == independentId);
+            var dependent = _dbContext.Plans.Where(i => i.Id == dependentId).Include(d => d.dependentPlans).Single();
+
+            if (indept == null || dependent == null)
+                return false;
+
+            var visited = new HashSet<int>();
+            return !HasCycle(indept, dependent, indept.Id, visited);
+        }
+
+        // DFS algorithm
+        public bool HasCycle(EntityModel.Plans.Plan plan, EntityModel.Plans.Plan dependent, int target, HashSet<int> visited)
+        {
+            if (dependent.Id == target)
+                return false;
+            visited.Add(plan.Id);
+
+            var depend = _dbContext.Plans.Where(i => i.Id == dependent.Id).Include(d => d.dependentPlans).Single();
+
+            foreach (var dep in depend.dependentPlans)
+            {
+                if (!visited.Contains(dep.Id) && HasCycle(dependent, dep, target, visited))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
+            visited.Remove(plan.Id);
+            return true;
+        }
+
+        public bool CheckExist(int independentId, int dependentId)
+        {
+            var indept = _dbContext.Plans.FirstOrDefault(c => c.Id == independentId);
+            var dependent = _dbContext.Plans.FirstOrDefault(d => d.Id == dependentId);
+
+            if (indept == null || dependent == null)
+                return false;
+
+            return true;
         }
     }
 }

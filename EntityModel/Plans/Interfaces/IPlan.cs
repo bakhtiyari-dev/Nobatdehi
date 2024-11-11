@@ -2,7 +2,7 @@
 {
     public interface IPlan
     {
-        public void Create(Plan plan, PlanOption planOption);
+        public  void Create(Plan plan, PlanOption planOption);
         public void Update(int id, Plan newPlan, PlanOption newPlanOption);
         public void Delete(int id);
         public IQueryable? GetAll();
