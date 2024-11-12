@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer
 {
-    public class DatabaseContext : IdentityDbContext<UserManager>
+    public class DatabaseContext : IdentityDbContext<CostumIdentityUser>
     {
         public DatabaseContext()
         {
@@ -18,33 +18,36 @@ namespace DataAccessLayer
         }
 
         //about plan
-        DbSet<Plan> Plans { get; set; }
-
+        public DbSet<Plan> Plans { get; set; }
+        
         //about office
-        DbSet<Office> Offices { get; set; }
-
+        public DbSet<Office> Offices { get; set; }
+        
         //about option
-        DbSet<PlanOption> PlanOptions { get; set; }
-        DbSet<OfficePlanOption> OfficePlanOptions { get; set; }
-        DbSet<WeekPlan> WeekPlans { get; set; }
-
+        public DbSet<PlanOption> PlanOptions { get; set; }
+        public DbSet<OfficePlanOption> OfficePlanOptions { get; set; }
+        public DbSet<WeekPlan> WeekPlans { get; set; }
+        
         //about turn
-        DbSet<Turn> turns { get; set; }
-        DbSet<TurnPool> turnPools { get; set; }
-        DbSet<AvailableTurn> availableTurns { get; set; }
-
+        public DbSet<Turn> turns { get; set; }
+        public DbSet<TurnPool> turnPools { get; set; }
+        public DbSet<AvailableTurn> availableTurns { get; set; }
+        
         //about member
-        DbSet<Citizen> citizens { get; set; }
+        public DbSet<Citizen> citizens { get; set; }
 
-        // On Model Creating Relation Set
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    base.OnModelCreating(builder);
-        //    builder.Entity<Plan>(c =>
-        //    {
-        //        c.HasOne(c => c.PlanOption).WithOne().HasForeignKey<PlanOption>(po => po.PlanId);
-        //    });
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Plan>()
+                .HasMany(c => c.dependentPlans)
+                .WithMany(c => c.headPlans)
+                .UsingEntity<Dictionary<string, object>>(
+                    "PlanDependencies",
+                    j => j.HasOne<Plan>().WithMany().HasForeignKey("Dependencies"),
+                    j => j.HasOne<Plan>().WithMany().HasForeignKey("PlanId"));
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -52,7 +55,7 @@ namespace DataAccessLayer
         }
     }
 
-    public class UserManager : IdentityUser
+    public class CostumIdentityUser : IdentityUser
     {
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
@@ -60,6 +63,6 @@ namespace DataAccessLayer
 
         //Relations
 
-        public Office Office { get; set; }
+        public int OfficeId { get; set; }
     }
 }
