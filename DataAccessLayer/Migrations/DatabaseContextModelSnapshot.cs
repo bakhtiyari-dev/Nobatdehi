@@ -133,10 +133,7 @@ namespace DataAccessLayer.Migrations
             modelBuilder.Entity("EntityModel.Offices.OfficePlanOption", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Capacity")
                         .HasColumnType("int");

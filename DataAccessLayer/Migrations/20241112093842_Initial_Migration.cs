@@ -117,18 +117,11 @@ namespace DataAccessLayer.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    PlanId = table.Column<int>(type: "int", nullable: true)
+                    Status = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Plans", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Plans_Plans_PlanId",
-                        column: x => x.PlanId,
-                        principalSchema: "Plan",
-                        principalTable: "Plans",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -273,8 +266,7 @@ namespace DataAccessLayer.Migrations
                 schema: "Option",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     FromDate = table.Column<DateOnly>(type: "date", nullable: false),
                     ToDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
@@ -299,6 +291,32 @@ namespace DataAccessLayer.Migrations
                         principalTable: "Plans",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PlanDependencies",
+                schema: "Plan",
+                columns: table => new
+                {
+                    Dependencies = table.Column<int>(type: "int", nullable: false),
+                    PlanId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlanDependencies", x => new { x.Dependencies, x.PlanId });
+                    table.ForeignKey(
+                        name: "FK_PlanDependencies_Plans_Dependencies",
+                        column: x => x.Dependencies,
+                        principalSchema: "Plan",
+                        principalTable: "Plans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlanDependencies_Plans_PlanId",
+                        column: x => x.PlanId,
+                        principalSchema: "Plan",
+                        principalTable: "Plans",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -507,15 +525,15 @@ namespace DataAccessLayer.Migrations
                 column: "PlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlanOptions_PlanId",
-                schema: "Option",
-                table: "PlanOptions",
+                name: "IX_PlanDependencies_PlanId",
+                schema: "Plan",
+                table: "PlanDependencies",
                 column: "PlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Plans_PlanId",
-                schema: "Plan",
-                table: "Plans",
+                name: "IX_PlanOptions_PlanId",
+                schema: "Option",
+                table: "PlanOptions",
                 column: "PlanId");
 
             migrationBuilder.CreateIndex(
@@ -574,6 +592,10 @@ namespace DataAccessLayer.Migrations
             migrationBuilder.DropTable(
                 name: "DesableTurns",
                 schema: "Turn");
+
+            migrationBuilder.DropTable(
+                name: "PlanDependencies",
+                schema: "Plan");
 
             migrationBuilder.DropTable(
                 name: "PlanOptions",
