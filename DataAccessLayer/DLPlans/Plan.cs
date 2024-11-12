@@ -204,11 +204,7 @@ namespace DataAccessLayer.DLPlans
 
             foreach (var dep in depend.dependentPlans)
             {
-                if (!visited.Contains(dep.Id) && HasCycle(dependent, dep, target, visited))
-                {
-                    return true;
-                }
-                else
+                if (visited.Contains(dep.Id) || !HasCycle(dependent, dep, target, visited))
                 {
                     return false;
                 }
