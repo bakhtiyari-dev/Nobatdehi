@@ -1,4 +1,5 @@
-﻿using EntityModel.Plans;
+﻿using EntityModel.Offices;
+using EntityModel.Plans;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
 using Swashbuckle.AspNetCore.Annotations;
@@ -149,26 +150,6 @@ namespace PresentationLayer.Controllers.Plans
                 return $"Error: Both plans must be available !".AsQueryable();
             }
             return _blPlan.GetAllDependencies() ?? $"Error: not find any plan dependencies".AsQueryable();
-        }
-
-        //Office Plan Option
-
-        [HttpPost("officeOption")]
-        public IActionResult CreateOfficePlanOption(int officeId, int PlanId, DateOnly firstDate, DateOnly lastDate, int capacity)
-        {
-            return Ok("Create");
-        }
-
-        [HttpPut("officeOption")]
-        public IActionResult UpdateOfficePlanOption(int officeId, int PlanId, DateOnly firstDate, DateOnly lastDate, int capacity)
-        {
-            return Ok("Update");
-        }
-
-        [HttpDelete("officeOption")]
-        public IActionResult DeleteOfficePlanOption(int officeId, int PlanId)
-        {
-            return Ok("Delete");
         }
 
         //Work Plan

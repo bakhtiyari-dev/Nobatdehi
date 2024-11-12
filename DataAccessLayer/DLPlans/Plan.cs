@@ -5,10 +5,10 @@ namespace DataAccessLayer.DLPlans
 {
     public class Plan:IPlan,IPlanDependency, IPlanHelper
     {
-        private DatabaseContext _dbContext = new DatabaseContext();
+        private DatabaseContext _dbContext;
         public Plan()
         {
-                
+                _dbContext = new DatabaseContext();
         }
 
         public void Create(EntityModel.Plans.Plan plan, EntityModel.Plans.PlanOption planOption)

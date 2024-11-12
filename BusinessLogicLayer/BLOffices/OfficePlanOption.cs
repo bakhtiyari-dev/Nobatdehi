@@ -1,28 +1,37 @@
 ﻿using EntityModel.Offices.Interfaces;
-using DataAccessLayer;
 
 namespace BusinessLogicLayer.BLOffices
 {
     public class OfficePlanOption : IOfficePlanOption
     {
-        private DatabaseContext _databaseContext = new DatabaseContext();
+        DataAccessLayer.DLOffices.OfficePlanOption _dlOPO;
         public OfficePlanOption() 
         {
-
+            _dlOPO = new DataAccessLayer.DLOffices.OfficePlanOption();
         }
-        public void Create(EntityModel.Offices.OfficePlanOption officePlan)
+        public void Create(int officeId, int planId, EntityModel.Offices.OfficePlanOption officePlan)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
+            _dlOPO.Create(officeId, planId, officePlan);
         }
 
-        public void Update(int id, EntityModel.Offices.OfficePlanOption newOfficePlan)
+        public void Delete(int officeId, int planId)
         {
-            throw new NotImplementedException();
+            _dlOPO.Delete(officeId, planId);
+        }
+
+        public EntityModel.Offices.OfficePlanOption? Get(int officeId, int planId)
+        {
+            return _dlOPO.Get(officeId, planId);
+        }
+
+        public List<EntityModel.Offices.OfficePlanOption>? GetAll()
+        {
+            return _dlOPO.GetAll();
+        }
+
+        public void Update(int officeId, int planId, EntityModel.Offices.OfficePlanOption newOfficePlan)
+        {
+            _dlOPO.Update(officeId, planId, newOfficePlan);
         }
     }
 }
