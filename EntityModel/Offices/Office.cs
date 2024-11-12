@@ -17,11 +17,11 @@ namespace EntityModel.Offices
 
         //Relations
 
-        public List<Turn> Turns { get; set; }
-        public List<OfficePlanOption> OfficePlanOptions { get; set; }
+        public List<Turn> Turns { get; set; } = new List<Turn>();
+        public List<OfficePlanOption> OfficePlanOptions { get; set; } = new List<OfficePlanOption>();
 
         [MaybeNull]
         public List<string> UsersID { get; set; }
-        public List<DesabledTurn> DesabledTurns { get; set; }
+        public List<DesabledTurn> DesabledTurns { get; set; } = new List<DesabledTurn>();
     }
 }

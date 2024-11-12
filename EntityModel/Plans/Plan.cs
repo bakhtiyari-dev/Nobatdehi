@@ -18,8 +18,8 @@ namespace EntityModel.Plans
         public List<Plan> dependentPlans { get; set; } = new List<Plan>();
         public List<Plan> headPlans { get; set; } = new List<Plan>();
 
-        public List<Turn> Turns { get; set; }
-        public List<OfficePlanOption> OfficePlanOptions { get; set; }
-        public List<DesabledTurn> DesabledTurns { get; set; }
+        public List<Turn> Turns { get; set; } = new List<Turn>();
+        public List<OfficePlanOption> OfficePlanOptions { get; set; } = new List<OfficePlanOption>();
+        public List<DesabledTurn> DesabledTurns { get; set; } = new List<DesabledTurn>();
     }
 }
