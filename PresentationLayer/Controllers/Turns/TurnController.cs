@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace PresentationLayer.Controllers.Turns
+namespace PresentationLayer.Controllers.Turns.Turn
 {
     [ApiController]
     [Route("api/[controller]")]
