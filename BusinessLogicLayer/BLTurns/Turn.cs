@@ -5,35 +5,30 @@ namespace BusinessLogicLayer.BLTurns
 {
     public class Turn:ITurn
     {
-        private DatabaseContext _dbContext=new DatabaseContext();
+        DataAccessLayer.DLTurns.Turn _dlTurn;
         public Turn()
         {
-            
+            _dlTurn = new DataAccessLayer.DLTurns.Turn();
         }
 
         public void Create(EntityModel.Turns.Turn turn)
         {
-            throw new NotImplementedException();
+            _dlTurn.Create(turn);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _dlTurn.Delete(id);
         }
 
-        public EntityModel.Turns.Turn Get(int id)
+        public EntityModel.Turns.Turn? Get(int id)
         {
-            throw new NotImplementedException();
+            return _dlTurn.Get(id);
         }
 
-        public List<EntityModel.Turns.Turn> GetAll()
+        public List<EntityModel.Turns.Turn>? GetAll()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(int id, EntityModel.Turns.Turn newTurn)
-        {
-            throw new NotImplementedException();
+            return _dlTurn.GetAll();
         }
     }
 }

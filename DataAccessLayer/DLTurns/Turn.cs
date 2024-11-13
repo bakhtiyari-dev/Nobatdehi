@@ -4,35 +4,40 @@ namespace DataAccessLayer.DLTurns
 {
     public class Turn:ITurn
     {
-        private DatabaseContext _dbContext=new DatabaseContext();
+        private DatabaseContext _dbContext;
         public Turn()
         {
-            
+            _dbContext = new DatabaseContext();
         }
 
         public void Create(EntityModel.Turns.Turn turn)
         {
-            throw new NotImplementedException();
+            _dbContext.turns.Add(turn);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var turn = _dbContext.turns.FirstOrDefault(x => x.Id == id);
+
+            if (turn != null)
+            {
+                turn.Status = false;
+                _dbContext.Update(turn);
+                _dbContext.SaveChanges();
+            }
         }
 
-        public EntityModel.Turns.Turn Get(int id)
+        public EntityModel.Turns.Turn? Get(int id)
         {
-            throw new NotImplementedException();
+            var turn = _dbContext.turns.FirstOrDefault(x => x.Id == id);
+
+            return turn;
         }
 
-        public List<EntityModel.Turns.Turn> GetAll()
+        public List<EntityModel.Turns.Turn>? GetAll()
         {
-            throw new NotImplementedException();
-        }
-
-        public void Update(int id, EntityModel.Turns.Turn newTurn)
-        {
-            throw new NotImplementedException();
+            return _dbContext.turns.ToList();
         }
     }
 }

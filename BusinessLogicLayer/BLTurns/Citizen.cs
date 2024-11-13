@@ -24,5 +24,10 @@ namespace BusinessLogicLayer.BLTurns
         {
             return _dlCitizen.GetAllCitizens();
         }
+
+        public EntityModel.Turns.Citizen? Get(int id)
+        {
+            return _dlCitizen.Get(id);
+        }
     }
 }

@@ -27,5 +27,10 @@ namespace DataAccessLayer.DLTurns
         {
             return _dbContext.citizens.ToList();
         }
+
+        public EntityModel.Turns.Citizen? Get(int id)
+        {
+            return _dbContext.citizens.Where(c => c.Id == id).FirstOrDefault();
+        }
     }
 }

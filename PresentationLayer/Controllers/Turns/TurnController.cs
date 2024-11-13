@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EntityModel.Turns;
+using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.DTO;
 
 namespace PresentationLayer.Controllers.Turns.Turn
 {
@@ -7,28 +9,80 @@ namespace PresentationLayer.Controllers.Turns.Turn
 
     public class TurnController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetAllOTurns()
+        BusinessLogicLayer.BLTurns.Turn _blTurn;
+        BusinessLogicLayer.BLOffices.Office _blOffice;
+        BusinessLogicLayer.BLPlans.Plan _blPlan;
+        BusinessLogicLayer.BLTurns.Citizen _blCitizen;
+        public TurnController() 
         {
-            return Ok("GET ALL");
+            _blTurn = new BusinessLogicLayer.BLTurns.Turn();
+            _blOffice = new BusinessLogicLayer.BLOffices.Office();
+            _blPlan = new BusinessLogicLayer.BLPlans.Plan();
+            _blCitizen = new BusinessLogicLayer.BLTurns.Citizen();
+        }
+        [HttpGet]
+        public List<EntityModel.Turns.Turn>? GetAllOTurns()
+        {
+            return _blTurn.GetAll();
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTurnById(int id)
+        public EntityModel.Turns.Turn? GetTurnById(int id)
         {
-            return Ok("GET ALL");
+            return _blTurn.Get(id);
         }
 
-        [HttpPost("{id}")]
-        public IActionResult CreateTurn(int id)
+        [HttpPost]
+        public IActionResult CreateTurn(TurnDto turnDto)
         {
+            var office = _blOffice.Get(turnDto.OfficeId);
+
+            if (office != null) 
+            {
+                var plan = _blPlan.GetPlan(turnDto.PlanId);
+
+                if (plan != null)
+                {
+                    var citizen = _blCitizen.Get(turnDto.CitizenId);
+
+                    if (citizen != null)
+                    {
+                        var turn = new EntityModel.Turns.Turn();
+
+                        turn.PhoneNumber = turnDto.CitizenPhoneNumber;
+                        turn.UserId = turnDto.UserId;
+                        turn.TurnTime = DateTime.Now;
+                        turn.Office = office;
+                        turn.Plan = plan;
+                        turn.Citizen = citizen;
+                        turn.Status = true;
+
+                        _blTurn.Create(turn);
+                    }
+                    else
+                    {
+                        Ok("Submited Citizen Not Found!");
+                    }
+                }
+                else
+                {
+                    Ok("Submited Plan Not Found!");
+                }
+            }
+            else
+            {
+                Ok("Submited Office Not Found!");
+            }
+
+
             return Ok("GET ALL");
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteTurn(int id)
+        public EntityModel.Turns.Turn? DeleteTurn(int id)
         {
-            return Ok("Delete");
+            _blTurn.Delete(id);
+            return _blTurn.Get(id);
         }
     }
 
