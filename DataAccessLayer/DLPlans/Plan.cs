@@ -3,12 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLPlans
 {
-    public class Plan:IPlan,IPlanDependency, IPlanHelper
+    public class Plan:IPlan,IPlanDependency,IPlanHelper,IPlanCapacity
     {
         private DatabaseContext _dbContext;
         public Plan()
         {
                 _dbContext = new DatabaseContext();
+        }
+
+        public int SetId(int officeId, int planId)
+        {
+            return Convert.ToInt32(officeId.ToString() + planId.ToString());
         }
 
         public void Create(EntityModel.Plans.Plan plan, EntityModel.Plans.PlanOption planOption)
@@ -224,6 +229,48 @@ namespace DataAccessLayer.DLPlans
                 return false;
 
             return true;
+        }
+
+
+        // DAL : Capacity
+
+
+        public void IncreaseCapacity(int officeId, int planId, int capacity)
+        {
+            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+
+            if (officePlan != null)
+            {
+                officePlan.Capacity += capacity;
+                _dbContext.OfficePlanOptions.Update(officePlan);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public void DecreaseCapacity(int officeId, int planId, int capacity)
+        {
+            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+
+            if (officePlan != null)
+            {
+                officePlan.Capacity -= capacity;
+                if (officePlan.Capacity < 0)
+                    officePlan.Capacity = 0;
+                _dbContext.OfficePlanOptions.Update(officePlan);
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public void SetCapacity(int officeId, int planId, int capacity)
+        {
+            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+
+            if (officePlan != null)
+            {
+                officePlan.Capacity = capacity;
+                _dbContext.OfficePlanOptions.Update(officePlan);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }

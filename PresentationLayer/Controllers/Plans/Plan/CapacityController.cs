@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EntityModel.Offices;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers.Plans.PlanCapacity
 {
@@ -6,30 +7,38 @@ namespace PresentationLayer.Controllers.Plans.PlanCapacity
     [ApiController]
     public class CapacityController : Controller
     {
-
+        BusinessLogicLayer.BLPlans.Plan _blPlan;
+        BusinessLogicLayer.BLOffices.OfficePlanOption _blOfficePlan;
         public CapacityController()
         {
-
+            _blPlan = new BusinessLogicLayer.BLPlans.Plan();
+            _blOfficePlan = new BusinessLogicLayer.BLOffices.OfficePlanOption();
         }
 
         //Capacity
 
         [HttpPost]
-        public IActionResult IncreaseCapacity(int officeId, int planId, int amountToIncrease)
+        public OfficePlanOption? IncreaseCapacity(int officeId, int planId, int amountToIncrease)
         {
-            return Ok("Update");
+            _blPlan.IncreaseCapacity(officeId, planId, amountToIncrease);
+
+            return _blOfficePlan.Get(officeId, planId);
         }
 
         [HttpPut]
-        public IActionResult SetCapacity(int officeId, int planId, int amountToSet)
+        public OfficePlanOption? SetCapacity(int officeId, int planId, int amountToSet)
         {
-            return Ok("Update");
+            _blPlan.SetCapacity(officeId, planId, amountToSet);
+
+            return _blOfficePlan.Get(officeId, planId);
         }
 
         [HttpDelete]
-        public IActionResult ReduceCapacity(int officeId, int planId, int amountToReduce)
+        public OfficePlanOption? DecreaseCapacity(int officeId, int planId, int amountToReduce)
         {
-            return Ok("Update");
+            _blPlan.DecreaseCapacity(officeId, planId, amountToReduce);
+
+            return _blOfficePlan.Get(officeId, planId);
         }
     }
 }
