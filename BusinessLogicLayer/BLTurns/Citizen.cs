@@ -5,25 +5,24 @@ namespace BusinessLogicLayer.BLTurns
 {
     public class Citizen:ICitizen
     {
-        private DatabaseContext _databaseContext=new DatabaseContext();
+        DataAccessLayer.DLTurns.Citizen _dlCitizen;
         public Citizen()
         {
-            
+            _dlCitizen = new DataAccessLayer.DLTurns.Citizen();
         }
 
-        public EntityModel.Turns.Citizen Get(int id)
+
+        // BLL : Citizen
+
+
+        public List<EntityModel.Turns.Citizen>? GetCitizensById(string id)
         {
-            throw new NotImplementedException();
+            return _dlCitizen.GetCitizensById(id);
         }
 
-        public EntityModel.Turns.Citizen Get(string id)
+        public List<EntityModel.Turns.Citizen>? GetAllCitizens()
         {
-            throw new NotImplementedException();
-        }
-
-        public List<EntityModel.Turns.Citizen> GetAll()
-        {
-            throw new NotImplementedException();
+            return _dlCitizen.GetAllCitizens();
         }
     }
 }

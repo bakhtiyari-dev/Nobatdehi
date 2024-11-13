@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EntityModel.Turns;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel;
 
 namespace PresentationLayer.Controllers.Turns.Citizen
 {
@@ -6,25 +8,22 @@ namespace PresentationLayer.Controllers.Turns.Citizen
     [ApiController]
     public class CitizenController : ControllerBase
     {
-        public enum IdType
+        private BusinessLogicLayer.BLTurns.Citizen _blCitizen;
+        public CitizenController()
         {
-            auto,
-            Passport,
-            UniqId,
-            HouseholdId,
-            ExclusiveId
+            _blCitizen = new BusinessLogicLayer.BLTurns.Citizen();
         }
 
         [HttpGet]
-        public IActionResult GetAllCitizens()
+        public List<EntityModel.Turns.Citizen>? GetAllCitizens()
         {
-            return Ok("GET ALL");
+            return _blCitizen.GetAllCitizens();
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCitizenById(int id = 0, [FromQuery] IdType idType = IdType.auto)
+        public List<EntityModel.Turns.Citizen>? GetCitizenById(string id)
         {
-            return Ok("GET ALL");
+            return _blCitizen.GetCitizensById(id);
         }
     }
 }

@@ -1,9 +1,10 @@
-﻿namespace EntityModel.Turns.Interfaces
+﻿using EntityModel.Turns;
+
+namespace EntityModel.Turns.Interfaces
 {
     public interface ICitizen
     {
-        public List<Citizen> GetAll();
-        public Citizen Get(int id);
-        public Citizen Get(string id);
+        public List<Citizen>? GetCitizensById(string id);
+        public List<Citizen>? GetAllCitizens();
     }
 }

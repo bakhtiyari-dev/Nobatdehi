@@ -1,5 +1,7 @@
 ﻿using EntityModel.Plans.Interfaces;
 using DataAccessLayer;
+using EntityModel.Turns;
+using EntityModel.Turns.Interfaces;
 
 namespace BusinessLogicLayer.BLPlans
 {
@@ -104,5 +106,6 @@ namespace BusinessLogicLayer.BLPlans
         {
             _dlPlan.SetCapacity(officeId, planId, capacity);
         }
+
     }
 }

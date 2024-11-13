@@ -1,28 +1,31 @@
 ﻿using EntityModel.Turns.Interfaces;
+using EntityModel.Turns;
 
 namespace DataAccessLayer.DLTurns
 {
-    public class Citizen:ICitizen
+    public class Citizen: ICitizen
     {
-        private DatabaseContext _databaseContext=new DatabaseContext();
+        private DatabaseContext _dbContext;
         public Citizen()
         {
-            
+            _dbContext = new DatabaseContext();
         }
 
-        public EntityModel.Turns.Citizen Get(int id)
+
+
+        // DAL : Citizen
+
+
+        public List<EntityModel.Turns.Citizen>? GetCitizensById(string id)
         {
-            throw new NotImplementedException();
+            var citizens = _dbContext.citizens.Where(c => c.Id.ToString() == id || c.ExclusiveCode == id || c.Passport == id || c.UniqCode == id || c.HouseholdCode == id).ToList();
+
+            return citizens;
         }
 
-        public EntityModel.Turns.Citizen Get(string id)
+        public List<EntityModel.Turns.Citizen>? GetAllCitizens()
         {
-            throw new NotImplementedException();
-        }
-
-        public List<EntityModel.Turns.Citizen> GetAll()
-        {
-            throw new NotImplementedException();
+            return _dbContext.citizens.ToList();
         }
     }
 }

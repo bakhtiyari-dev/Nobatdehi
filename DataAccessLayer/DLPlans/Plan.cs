@@ -1,14 +1,16 @@
 ﻿using EntityModel.Plans.Interfaces;
+using EntityModel.Turns;
+using EntityModel.Turns.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLPlans
 {
-    public class Plan:IPlan,IPlanDependency,IPlanHelper,IPlanCapacity
+    public class Plan : IPlan, IPlanDependency, IPlanHelper, IPlanCapacity
     {
         private DatabaseContext _dbContext;
         public Plan()
         {
-                _dbContext = new DatabaseContext();
+            _dbContext = new DatabaseContext();
         }
 
         public int SetId(int officeId, int planId)
@@ -26,7 +28,7 @@ namespace DataAccessLayer.DLPlans
         public void Delete(int id)
         {
             var plan = _dbContext.Plans.FirstOrDefault(o => o.Id == id);
-            
+
             if (plan != null)
             {
                 plan.Status = false;
@@ -37,7 +39,7 @@ namespace DataAccessLayer.DLPlans
 
         public IQueryable? Get(int id)
         {
-            var plan = _dbContext.Plans.Where(p => p.Id == id).Join(_dbContext.PlanOptions, p => p.Id, po => po.Plan.Id, (p,po) => 
+            var plan = _dbContext.Plans.Where(p => p.Id == id).Join(_dbContext.PlanOptions, p => p.Id, po => po.Plan.Id, (p, po) =>
             new
             {
                 PlanId = p.Id,
@@ -76,7 +78,7 @@ namespace DataAccessLayer.DLPlans
             if (plan != null)
             {
                 var planOption = _dbContext.PlanOptions.FirstOrDefault(po => po.Plan.Id == plan.Id);
-                if(planOption != null)
+                if (planOption != null)
                 {
                     plan.Name = newPlan.Name ?? plan.Name;
                     planOption.CitizenIdType = newPlanOption.CitizenIdType ?? planOption.CitizenIdType;
@@ -142,11 +144,11 @@ namespace DataAccessLayer.DLPlans
 
             if (indept != null)
             {
-                
+
                 var dependent = indept.dependentPlans.FirstOrDefault(d => d.Id == dependentId);
 
                 if (dependent != null)
-                {   
+                {
                     indept.dependentPlans.Remove(dependent);
                     _dbContext.Plans.Update(indept);
                     _dbContext.SaveChanges();
