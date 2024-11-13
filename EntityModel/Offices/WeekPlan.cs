@@ -29,11 +29,8 @@ namespace EntityModel.Offices
         public required TimeOnly fridayLasttHour { get; set; }
 
         //Relations
-        public OfficePlanOption OfficePlanOption { get; set; }
 
-        public static implicit operator Microsoft.EntityFrameworkCore.Query.Internal.ResultContext?(WeekPlan? v)
-        {
-            throw new NotImplementedException();
-        }
+        public int OfficePlanOptionId { get; set; }
+        public OfficePlanOption OfficePlanOption { get; set; }
     }
 }

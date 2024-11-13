@@ -26,7 +26,7 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
 
             if (opo != null)
             {
-                return _blWeek.GetWeekPlan(Convert.ToInt32(officeId.ToString()+PlanId.ToString()));
+                return _blWeek.GetWeekPlan(Convert.ToInt32(officeId.ToString()+PlanId.ToString())) ?? NotFound("Not Found Any WeekPlan");
             }
 
             return NotFound("Not Found Selected OfficePlan");
@@ -65,10 +65,10 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
                         thursdayLasttHour = weekPlanDto.thursdayLasttHour,
 
                         fridayFirstHour = weekPlanDto.fridayFirstHour,
-                        fridayLasttHour = weekPlanDto.fridayLasttHour,
-
-                        OfficePlanOption = opo
+                        fridayLasttHour = weekPlanDto.fridayLasttHour
                     };
+
+                    _blWeek.Create(opo.Id, weekPlan);
 
                     return Ok("WeekPlan Was Added Seccessfully");
                 }
@@ -117,10 +117,10 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
                         thursdayLasttHour = weekPlanDto.thursdayLasttHour ?? oldWeekPlan.thursdayLasttHour,
 
                         fridayFirstHour = weekPlanDto.fridayFirstHour ?? oldWeekPlan.fridayFirstHour,
-                        fridayLasttHour = weekPlanDto.fridayLasttHour ?? oldWeekPlan.fridayLasttHour,
-
-                        OfficePlanOption = opo ?? oldWeekPlan.OfficePlanOption
+                        fridayLasttHour = weekPlanDto.fridayLasttHour ?? oldWeekPlan.fridayLasttHour
                     };
+
+                    _blWeek.Update(opo.Id, weekPlan);
 
                     return Ok("WeekPlan Was Updated Seccessfully");
                 }

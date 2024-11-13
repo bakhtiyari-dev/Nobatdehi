@@ -12,8 +12,9 @@ namespace DataAccessLayer.DLOffices
             _dbContext = new DatabaseContext();
         }
 
-        public void Create(EntityModel.Offices.WeekPlan weekPlan)
+        public void Create(int opoId, EntityModel.Offices.WeekPlan weekPlan)
         {
+            weekPlan.OfficePlanOptionId = opoId;
             _dbContext.WeekPlans.Add(weekPlan);
             _dbContext.SaveChanges();
         }
@@ -24,19 +25,21 @@ namespace DataAccessLayer.DLOffices
             _dbContext.SaveChanges();
         }
 
-        public IActionResult? GetWeekPlan(int id)
+        public IActionResult? GetWeekPlan(int opoId)
         {
-            var weekPlan = _dbContext.WeekPlans.FirstOrDefault(weekPlan => weekPlan.OfficePlanOption.Id == id);
+            var weekPlan = _dbContext.WeekPlans.FirstOrDefault(weekPlan => weekPlan.OfficePlanOptionId == opoId);
 
             return (IActionResult?)weekPlan;
         }
 
-        public void Update(int id, EntityModel.Offices.WeekPlan newWeekPlan)
+        public void Update(int opoId, EntityModel.Offices.WeekPlan newWeekPlan)
         {
-            var weekPlan = GetWeekPlan(id);
+            var check = GetWeekPlan(opoId);
 
-            if (weekPlan != null)
+            if (check != null)
             {
+                EntityModel.Offices.WeekPlan weekPlan = (EntityModel.Offices.WeekPlan) check;
+
                 weekPlan.SaterdayFirstHour = newWeekPlan.SaterdayFirstHour;
                 weekPlan.SaterdayLasttHour = newWeekPlan.SaterdayLasttHour;
 

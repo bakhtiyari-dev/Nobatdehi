@@ -11,9 +11,9 @@ namespace BusinessLogicLayer.BLOffices
             _dlWeek = new DataAccessLayer.DLOffices.WeekPlan();
         }
 
-        public void Create(EntityModel.Offices.WeekPlan weekPlan)
+        public void Create(int opoId, EntityModel.Offices.WeekPlan weekPlan)
         {
-            _dlWeek.Create(weekPlan);
+            _dlWeek.Create(opoId, weekPlan);
         }
 
         public void Delete(EntityModel.Offices.WeekPlan weekPlan)
@@ -21,14 +21,14 @@ namespace BusinessLogicLayer.BLOffices
             _dlWeek.Delete(weekPlan);
         }
 
-        public IActionResult? GetWeekPlan(int id)
+        public IActionResult? GetWeekPlan(int opoId)
         {
-            return _dlWeek.GetWeekPlan(id);
+            return _dlWeek.GetWeekPlan(opoId);
         }
 
-        public void Update(int id, EntityModel.Offices.WeekPlan newWeekPlan)
+        public void Update(int opoId, EntityModel.Offices.WeekPlan newWeekPlan)
         {
-            _dlWeek.Update(id, newWeekPlan);
+            _dlWeek.Update(opoId, newWeekPlan);
         }
     }
 }
