@@ -20,6 +20,5 @@ namespace EntityModel.Offices
 
         public Office Office { get; set; }
         public Plan Plan { get; set; }
-        
     }
 }

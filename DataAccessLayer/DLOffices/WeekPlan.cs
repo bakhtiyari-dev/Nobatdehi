@@ -1,27 +1,66 @@
-﻿using EntityModel.Offices.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
+using EntityModel.Offices.Interfaces;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
-namespace DataAccessLayer.OffDLOfficesces
+namespace DataAccessLayer.DLOffices
 {
     public class WeekPlan : IWeekPlan
     {
-        private DatabaseContext _dbContext = new DatabaseContext();
+        private DatabaseContext _dbContext;
         public WeekPlan()
         {
-
+            _dbContext = new DatabaseContext();
         }
+
         public void Create(EntityModel.Offices.WeekPlan weekPlan)
         {
-            throw new NotImplementedException();
+            _dbContext.WeekPlans.Add(weekPlan);
+            _dbContext.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(EntityModel.Offices.WeekPlan weekPlan)
         {
-            throw new NotImplementedException();
+            _dbContext.Remove(weekPlan);
+            _dbContext.SaveChanges();
+        }
+
+        public IActionResult? GetWeekPlan(int id)
+        {
+            var weekPlan = _dbContext.WeekPlans.FirstOrDefault(weekPlan => weekPlan.OfficePlanOption.Id == id);
+
+            return (IActionResult?)weekPlan;
         }
 
         public void Update(int id, EntityModel.Offices.WeekPlan newWeekPlan)
         {
-            throw new NotImplementedException();
+            var weekPlan = GetWeekPlan(id);
+
+            if (weekPlan != null)
+            {
+                weekPlan.SaterdayFirstHour = newWeekPlan.SaterdayFirstHour;
+                weekPlan.SaterdayLasttHour = newWeekPlan.SaterdayLasttHour;
+
+                weekPlan.SundayFirstHour = newWeekPlan.SundayFirstHour;
+                weekPlan.SundayLasttHour = newWeekPlan.SundayLasttHour;
+
+                weekPlan.MondayFirstHour = newWeekPlan.MondayFirstHour;
+                weekPlan.MondayLasttHour = newWeekPlan.MondayLasttHour;
+
+                weekPlan.tuesdayFirstHour = newWeekPlan.tuesdayFirstHour;
+                weekPlan.tuesdayLasttHour = newWeekPlan.tuesdayLasttHour;
+
+                weekPlan.wednesdayFirstHour = newWeekPlan.wednesdayFirstHour;
+                weekPlan.wednesdayLasttHour = newWeekPlan.wednesdayLasttHour;
+
+                weekPlan.thursdayFirstHour = newWeekPlan.thursdayFirstHour;
+                weekPlan.thursdayLasttHour = newWeekPlan.tuesdayLasttHour;
+
+                weekPlan.fridayFirstHour = newWeekPlan.fridayFirstHour;
+                weekPlan.fridayLasttHour = newWeekPlan.fridayLasttHour;
+
+                _dbContext.WeekPlans.Update(weekPlan);
+                _dbContext.SaveChanges();
+            }
         }
     }
 }
