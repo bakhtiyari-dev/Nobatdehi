@@ -18,19 +18,19 @@ namespace PresentationLayer.Controllers.Plans.Plan
 
         [HttpGet]
 
-        public IQueryable? GetAllPlans()
+        public ActionResult<IQueryable>? GetAllPlans()
         {
-            return _blPlan.GetAll() ?? "not find any plans".AsQueryable();
+            return Ok(_blPlan.GetAll());
         }
 
         [HttpGet("{id}")]
-        public IQueryable? GetPlanById(int id)
+        public ActionResult<IQueryable>? GetPlanById(int id)
         {
-            return _blPlan.Get(id) ?? $"not find plan with id: {id}!".AsQueryable();
+            return Ok(_blPlan.Get(id));
         }
 
         [HttpPost]
-        public IQueryable? CreatePlan([FromQuery] PlanDto planDto, [FromQuery] PlanOptionDto planOptionDto)
+        public ActionResult<IQueryable>? CreatePlan([FromQuery] PlanDto planDto, [FromQuery] PlanOptionDto planOptionDto)
         {
             EntityModel.Plans.Plan plan = new EntityModel.Plans.Plan()
             {
@@ -49,11 +49,11 @@ namespace PresentationLayer.Controllers.Plans.Plan
 
             _blPlan.Create(plan, option);
 
-            return _blPlan.GetAll() ?? "not find any plans".AsQueryable();
+            return Ok(_blPlan.GetAll());
         }
 
         [HttpPut("{id}")]
-        public IQueryable? UpdatePlan(int id, [FromQuery] uPlanDto planDto, [FromQuery] uPlanOptionDto planOptionDto)
+        public ActionResult<IQueryable>? UpdatePlan(int id, [FromQuery] uPlanDto planDto, [FromQuery] uPlanOptionDto planOptionDto)
         {
             var plan = _blPlan.GetPlan(id);
 
@@ -75,19 +75,19 @@ namespace PresentationLayer.Controllers.Plans.Plan
                 }
                 else
                 {
-                    return $"this plan has disabled!".AsQueryable();
+                    return Conflict("this plan has disabled");
                 }
             }
             else
             {
-                return $"not find plan with id: {id}!".AsQueryable();
+                return NotFound($"Plan Was Not Found");
             }
 
-            return _blPlan.Get(id);
+            return Ok(_blPlan.Get(id));
         }
 
         [HttpDelete("{id}")]
-        public IQueryable? DeletePlan(int id)
+        public ActionResult<IQueryable>? DeletePlan(int id)
         {
             if (_blPlan.IsExist(id))
             {
@@ -95,10 +95,10 @@ namespace PresentationLayer.Controllers.Plans.Plan
             }
             else
             {
-                return $"not find plan with id: {id}!".AsQueryable();
+                return NotFound($"Plan Was Not Found");
             }
 
-            return _blPlan.GetAll() ?? "not find any plans".AsQueryable();
+            return Ok(_blPlan.Get(id));
         }
 
     }

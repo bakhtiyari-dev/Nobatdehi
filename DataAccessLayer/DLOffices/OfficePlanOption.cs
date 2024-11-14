@@ -1,20 +1,13 @@
-﻿using DataAccessLayer.DLPlans;
-using DataAccessLayer.Migrations;
-using EntityModel.Offices.Interfaces;
+﻿using EntityModel.Offices.Interfaces;
 
 namespace DataAccessLayer.DLOffices
 {
     public class OfficePlanOption : IOfficePlanOption
     {
         private DatabaseContext _databaseContext;
-        public OfficePlanOption() 
+        public OfficePlanOption()
         {
             _databaseContext = new DatabaseContext();
-        }
-
-        public int SetId(int officeId, int planId)
-        {
-            return Convert.ToInt32(officeId.ToString() + planId.ToString());
         }
 
         public void Create(int officeId, int planId, EntityModel.Offices.OfficePlanOption officePlan)
@@ -24,7 +17,6 @@ namespace DataAccessLayer.DLOffices
 
             if (office != null && plan != null)
             {
-                officePlan.Id = SetId(officeId, planId);
                 officePlan.Office = office;
                 officePlan.Plan = plan;
 
@@ -40,34 +32,33 @@ namespace DataAccessLayer.DLOffices
 
         public void Delete(int officeId, int planId)
         {
-            var result = _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+            var result = _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
 
-            if (result != null) 
+            if (result != null)
             {
                 result.Status = false;
                 _databaseContext.OfficePlanOptions.Update(result);
-                _databaseContext.SaveChanges(); 
+                _databaseContext.SaveChanges();
             }
 
         }
 
         public EntityModel.Offices.OfficePlanOption? Get(int officeId, int planId)
         {
-            return _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+            return _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
         }
 
         public List<EntityModel.Offices.OfficePlanOption>? GetAll()
         {
-             return _databaseContext.OfficePlanOptions.ToList();
+            return _databaseContext.OfficePlanOptions.ToList();
         }
 
         public void Update(int officeId, int planId, EntityModel.Offices.OfficePlanOption newOfficePlan)
         {
-            var officePlan = _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+            var officePlan = _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
 
             if (officePlan != null)
             {
-                officePlan.Id = SetId(officeId, planId);
                 officePlan.FromDate = newOfficePlan.FromDate;
                 officePlan.ToDate = newOfficePlan.ToDate;
                 officePlan.Capacity = newOfficePlan.Capacity;

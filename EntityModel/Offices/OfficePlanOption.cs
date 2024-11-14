@@ -8,7 +8,6 @@ namespace EntityModel.Offices
     [Table("OfficePlanOptions", Schema = "Option")]
     public class OfficePlanOption
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
         public DateOnly FromDate { get; set; }
         public DateOnly ToDate { get; set; }

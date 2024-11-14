@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using PresentationLayer.DTO;
 
 namespace PresentationLayer.Controllers.Offices.Office
@@ -17,15 +18,15 @@ namespace PresentationLayer.Controllers.Offices.Office
         }
 
         [HttpGet]
-        public List<EntityModel.Offices.Office>? GetAllOffices()
+        public ActionResult<EntityModel.Offices.Office>? GetAllOffices()
         {
-            return _blOffice.GetAll();
+            return Ok(_blOffice.GetAll());
         }
 
         [HttpGet("{id}")]
-        public EntityModel.Offices.Office? GetOfficeById(int id)
+        public ActionResult<EntityModel.Offices.Office>? GetOfficeById(int id)
         {
-            return _blOffice.Get(id);
+            return Ok(_blOffice.Get(id));
         }
 
         [HttpPost]
@@ -45,21 +46,32 @@ namespace PresentationLayer.Controllers.Offices.Office
         [HttpPut("{id}")]
         public IActionResult UpdateOffice(int id, [FromQuery] OfficeDto officeDto)
         {
-            EntityModel.Offices.Office office = new EntityModel.Offices.Office()
+            if (_blOffice.Get(id) != null)
             {
-                City = officeDto.City,
-                PhoneNumber = officeDto.PhoneNumber,
-                Status = true
-            };
-            _blOffice.Update(id, office);
-            return Ok("Office was updated successfully");
+                EntityModel.Offices.Office office = new EntityModel.Offices.Office()
+                {
+                    City = officeDto.City,
+                    PhoneNumber = officeDto.PhoneNumber,
+                    Status = true
+                };
+
+                _blOffice.Update(id, office);
+                return Ok("Office was updated successfully");
+            }
+
+            return NotFound("Office Was Not Found");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteOffice(int id)
         {
-            _blOffice.Delete(id);
-            return Ok("Office was desabled successfully");
+            if(_blOffice.Get(id) != null)
+            {
+                _blOffice.Delete(id);
+                return Ok("Office was desabled successfully");
+            }
+
+            return NotFound("Office Was Not Found");
         }
     }
 }

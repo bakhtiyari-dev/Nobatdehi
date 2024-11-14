@@ -20,20 +20,20 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         //Work Plan
 
         [HttpGet]
-        public IActionResult? GetWorkPlan(int officeId, int PlanId)
+        public ActionResult<WeekPlan>? GetWorkPlan(int officeId, int PlanId)
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
             if (opo != null)
             {
-                return _blWeek.GetWeekPlan(Convert.ToInt32(officeId.ToString()+PlanId.ToString())) ?? NotFound("Not Found Any WeekPlan");
+                return Ok(_blWeek.GetWeekPlan(opo.Id));
             }
 
             return NotFound("Not Found Selected OfficePlan");
         }
 
         [HttpPost]
-        public IActionResult CreateWorkPlan(int officeId, int PlanId, WeekPlanDto weekPlanDto)
+        public IActionResult CreateWorkPlan(int officeId, int PlanId,[FromQuery] WeekPlanDto weekPlanDto)
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
@@ -85,7 +85,7 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         }
 
         [HttpPut]
-        public IActionResult UpdateWorkPlan(int officeId, int PlanId, uWeekPlanDto weekPlanDto)
+        public IActionResult UpdateWorkPlan(int officeId, int PlanId,[FromQuery] uWeekPlanDto weekPlanDto)
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
@@ -142,11 +142,11 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
 
             if (opo != null)
             {
-                var check = _blWeek.GetWeekPlan(Convert.ToInt32(officeId.ToString() + PlanId.ToString()));
+                var check = _blWeek.GetWeekPlan(opo.Id);
 
                 if (check != null)
                 {
-                    _blWeek.Delete((WeekPlan)check);
+                    _blWeek.Delete(check);
                     return Ok("WeekPlan Was Deleted Seccessfully");
                 }
                 else

@@ -21,7 +21,7 @@ namespace BusinessLogicLayer.BLOffices
             _dlWeek.Delete(weekPlan);
         }
 
-        public IActionResult? GetWeekPlan(int opoId)
+        public EntityModel.Offices.WeekPlan? GetWeekPlan(int opoId)
         {
             return _dlWeek.GetWeekPlan(opoId);
         }

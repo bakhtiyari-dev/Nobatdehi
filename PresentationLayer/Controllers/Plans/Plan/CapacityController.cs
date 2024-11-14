@@ -18,27 +18,42 @@ namespace PresentationLayer.Controllers.Plans.PlanCapacity
         //Capacity
 
         [HttpPost]
-        public OfficePlanOption? IncreaseCapacity(int officeId, int planId, int amountToIncrease)
+        public ActionResult<OfficePlanOption>? IncreaseCapacity(int officeId, int planId, int amountToIncrease)
         {
-            _blPlan.IncreaseCapacity(officeId, planId, amountToIncrease);
+            if (_blOfficePlan.Get(officeId, planId) != null)
+            {
+                _blPlan.IncreaseCapacity(officeId, planId, amountToIncrease);
+                
+                return Ok(_blOfficePlan.Get(officeId, planId));
+            }
 
-            return _blOfficePlan.Get(officeId, planId);
+            return NotFound("OPO Was Not Found");
         }
 
         [HttpPut]
-        public OfficePlanOption? SetCapacity(int officeId, int planId, int amountToSet)
+        public ActionResult<OfficePlanOption>? SetCapacity(int officeId, int planId, int amountToSet)
         {
-            _blPlan.SetCapacity(officeId, planId, amountToSet);
+            if (_blOfficePlan.Get(officeId, planId) != null)
+            {
+                _blPlan.SetCapacity(officeId, planId, amountToSet);
 
-            return _blOfficePlan.Get(officeId, planId);
+                return Ok(_blOfficePlan.Get(officeId, planId));
+            }
+
+            return NotFound("OPO Was Not Found");
         }
 
         [HttpDelete]
-        public OfficePlanOption? DecreaseCapacity(int officeId, int planId, int amountToReduce)
+        public ActionResult<OfficePlanOption>? DecreaseCapacity(int officeId, int planId, int amountToReduce)
         {
-            _blPlan.DecreaseCapacity(officeId, planId, amountToReduce);
+            if (_blOfficePlan.Get(officeId, planId) != null)
+            {
+                _blPlan.DecreaseCapacity(officeId, planId, amountToReduce);
 
-            return _blOfficePlan.Get(officeId, planId);
+                return Ok(_blOfficePlan.Get(officeId, planId));
+            }
+
+            return NotFound("OPO Was Not Found");
         }
     }
 }

@@ -25,11 +25,11 @@ namespace DataAccessLayer.DLOffices
             _dbContext.SaveChanges();
         }
 
-        public IActionResult? GetWeekPlan(int opoId)
+        public EntityModel.Offices.WeekPlan? GetWeekPlan(int opoId)
         {
-            var weekPlan = _dbContext.WeekPlans.FirstOrDefault(weekPlan => weekPlan.OfficePlanOptionId == opoId);
+            var weekPlan = _dbContext.WeekPlans.FirstOrDefault(w => w.OfficePlanOption.Id == opoId);
 
-            return (IActionResult?)weekPlan;
+            return weekPlan;
         }
 
         public void Update(int opoId, EntityModel.Offices.WeekPlan newWeekPlan)
