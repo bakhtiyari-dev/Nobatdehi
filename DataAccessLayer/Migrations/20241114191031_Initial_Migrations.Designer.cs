@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241114061023_Initial_Migration")]
-    partial class Initial_Migration
+    [Migration("20241114191031_Initial_Migrations")]
+    partial class Initial_Migrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -392,10 +392,6 @@ namespace DataAccessLayer.Migrations
 
                     b.Property<int>("CitizenId")
                         .HasColumnType("int");
-
-                    b.Property<string>("CitizenIdType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OfficeId")
                         .HasColumnType("int");
