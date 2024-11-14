@@ -13,12 +13,16 @@ namespace PresentationLayer.Controllers.Turns.Turn
         BusinessLogicLayer.BLOffices.Office _blOffice;
         BusinessLogicLayer.BLPlans.Plan _blPlan;
         BusinessLogicLayer.BLTurns.Citizen _blCitizen;
+        BusinessLogicLayer.BLOffices.OfficePlanOption _blOpo;
+        BusinessLogicLayer.BLTurns.TurnPool _blPool;
         public TurnController() 
         {
             _blTurn = new BusinessLogicLayer.BLTurns.Turn();
             _blOffice = new BusinessLogicLayer.BLOffices.Office();
             _blPlan = new BusinessLogicLayer.BLPlans.Plan();
             _blCitizen = new BusinessLogicLayer.BLTurns.Citizen();
+            _blOpo = new BusinessLogicLayer.BLOffices.OfficePlanOption();
+            _blPool = new BusinessLogicLayer.BLTurns.TurnPool();
         }
         [HttpGet]
         public List<EntityModel.Turns.Turn>? GetAllOTurns()
@@ -83,6 +87,21 @@ namespace PresentationLayer.Controllers.Turns.Turn
         {
             _blTurn.Delete(id);
             return _blTurn.Get(id);
+        }
+
+        // Turn Pool
+
+        [HttpPost("TurnPool")]
+        public async Task<IActionResult>? BuildAvailableTurns(int officeId, int planId)
+        {
+            var opo = _blOpo.Get(officeId, planId);
+
+            if (opo != null)
+            {
+                return Ok(await _blPool.buldturns(opo));
+            }
+
+            return NotFound("OPO Was Not Found");
         }
     }
 

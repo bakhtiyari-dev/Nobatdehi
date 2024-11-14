@@ -1,4 +1,5 @@
 ﻿using EntityModel.Offices.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLOffices
 {
@@ -45,7 +46,7 @@ namespace DataAccessLayer.DLOffices
 
         public EntityModel.Offices.OfficePlanOption? Get(int officeId, int planId)
         {
-            return _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
+            return _databaseContext.OfficePlanOptions.Include(o => o.Office).Include(o => o.Plan).FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
         }
 
         public List<EntityModel.Offices.OfficePlanOption>? GetAll()
