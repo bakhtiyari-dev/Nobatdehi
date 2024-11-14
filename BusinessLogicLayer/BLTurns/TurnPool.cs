@@ -19,12 +19,17 @@ namespace BusinessLogicLayer.BLTurns
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _dlPool.Delete(id);
         }
 
-        public DateTime GetTurnTime(DateOnly day, int opoId)
+        public DateTime GetTurnTime(DateOnly day, OfficePlanOption opo)
         {
-            throw new NotImplementedException();
+            return _dlPool.GetTurnTime(day, opo);
+        }
+
+        public bool isOpoExist(int id)
+        {
+            return _dlPool.isOpoExist(id);
         }
 
         public void Update(int id, EntityModel.Turns.TurnPool newTurnPool)

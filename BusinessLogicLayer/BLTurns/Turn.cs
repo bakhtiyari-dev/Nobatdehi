@@ -1,5 +1,6 @@
 ﻿using EntityModel.Turns.Interfaces;
 using DataAccessLayer;
+using EntityModel.Offices;
 
 namespace BusinessLogicLayer.BLTurns
 {
@@ -11,9 +12,9 @@ namespace BusinessLogicLayer.BLTurns
             _dlTurn = new DataAccessLayer.DLTurns.Turn();
         }
 
-        public void Create(EntityModel.Turns.Turn turn)
+        public void Create(EntityModel.Turns.Turn turn, OfficePlanOption officePlan)
         {
-            _dlTurn.Create(turn);
+            _dlTurn.Create(turn, officePlan);
         }
 
         public void Delete(int id)
@@ -29,6 +30,11 @@ namespace BusinessLogicLayer.BLTurns
         public List<EntityModel.Turns.Turn>? GetAll()
         {
             return _dlTurn.GetAll();
+        }
+
+        public bool IsCitizenExist(int citizenId, int planId)
+        {
+            return _dlTurn.IsCitizenExist(citizenId, planId);
         }
     }
 }

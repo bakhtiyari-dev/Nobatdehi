@@ -10,10 +10,12 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
     {
         BusinessLogicLayer.BLOffices.OfficePlanOption _blOpo;
         BusinessLogicLayer.BLOffices.WeekPlan _blWeek;
+        BusinessLogicLayer.BLTurns.TurnPool _blPool;
         public OfficeWorkPlanController()
         {
             _blOpo = new BusinessLogicLayer.BLOffices.OfficePlanOption();
             _blWeek = new BusinessLogicLayer.BLOffices.WeekPlan();
+            _blPool = new BusinessLogicLayer.BLTurns.TurnPool();
         }
 
 
@@ -33,14 +35,14 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         }
 
         [HttpPost]
-        public IActionResult CreateWorkPlan(int officeId, int PlanId,[FromQuery] WeekPlanDto weekPlanDto)
+        public async Task<IActionResult>? CreateWorkPlan(int officeId, int PlanId,[FromQuery] WeekPlanDto weekPlanDto)
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
 
             if (opo != null)
             {
-                var check = _blWeek.GetWeekPlan(Convert.ToInt32(officeId.ToString() + PlanId.ToString()));
+                var check = _blWeek.GetWeekPlan(opo.Id);
 
                 if (check == null)
                 {
@@ -70,7 +72,12 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
 
                     _blWeek.Create(opo.Id, weekPlan);
 
-                    return Ok("WeekPlan Was Added Seccessfully");
+                    if (_blPool.isOpoExist(opo.Id))
+                    {
+                        _blPool.Delete(opo.Id);
+                    }
+
+                    return Ok("WeekPlan Was Added Seccessfully" + Environment.NewLine + await _blPool.buldturns(opo));
                 }
                 else
                 {

@@ -3,6 +3,7 @@ using EntityModel.Offices;
 using DataAccessLayer.DLOffices;
 using EntityModel.Plans;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLTurns
 {
@@ -160,19 +161,43 @@ namespace DataAccessLayer.DLTurns
             return "Not Found Office Work Plan";
         }
 
-        public void Delete(int id)
+        public DateTime GetTurnTime(DateOnly day, EntityModel.Offices.OfficePlanOption opo)
         {
-            throw new NotImplementedException();
+            var turnPool = _dbContext.turnPools.Include(a => a.AvailableTurns).FirstOrDefault(t => t.OfficePlanOptionId == opo.Id);
+
+            var turns = turnPool.AvailableTurns.Where(a => a.AvailableTurnDate == day).OrderBy(t => t.AvailableTurnTime).ToList();
+
+            DateTime turnTime = turns[0].AvailableTurnDate.ToDateTime(turns[0].AvailableTurnTime);
+
+            _dbContext.Remove(turns[0]);
+            _dbContext.SaveChanges();
+
+            return turnTime;
         }
 
-        public DateTime GetTurnTime(DateOnly day, int opoId)
+        public bool isOpoExist(int id)
         {
-            throw new NotImplementedException();
+            var pool = _dbContext.turnPools.FirstOrDefault(p => p.OfficePlanOptionId == id);
+
+            if (pool == null)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void Update(int id, EntityModel.Turns.TurnPool newTurnPool)
         {
             throw new NotImplementedException();
+        }
+        
+        public void Delete(int id)
+        {
+            var pool = _dbContext.turnPools.FirstOrDefault(p => p.OfficePlanOptionId == id);
+
+            _dbContext.turnPools.Remove(pool);
+            _dbContext.SaveChanges();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EntityModel.Turns.Interfaces;
+﻿using EntityModel.Offices;
+using EntityModel.Turns.Interfaces;
 
 namespace DataAccessLayer.DLTurns
 {
@@ -10,7 +11,7 @@ namespace DataAccessLayer.DLTurns
             _dbContext = new DatabaseContext();
         }
 
-        public void Create(EntityModel.Turns.Turn turn)
+        public void Create(EntityModel.Turns.Turn turn, OfficePlanOption officePlan)
         {
             _dbContext.turns.Add(turn);
             _dbContext.SaveChanges();
@@ -18,7 +19,7 @@ namespace DataAccessLayer.DLTurns
 
         public void Delete(int id)
         {
-            var turn = _dbContext.turns.FirstOrDefault(x => x.Id == id);
+            var turn = _dbContext.turns.FirstOrDefault(t => t.Id == id);
 
             if (turn != null)
             {
@@ -38,6 +39,13 @@ namespace DataAccessLayer.DLTurns
         public List<EntityModel.Turns.Turn>? GetAll()
         {
             return _dbContext.turns.ToList();
+        }
+
+        public bool IsCitizenExist(int citizenId, int planId)
+        {
+            var turn = _dbContext.turns.FirstOrDefault(t => t.CitizenId == citizenId && t.PlanId == planId);
+
+            return turn != null;
         }
     }
 }

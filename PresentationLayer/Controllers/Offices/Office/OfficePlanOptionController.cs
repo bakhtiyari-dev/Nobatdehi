@@ -34,21 +34,31 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         [HttpPost]
         public ActionResult<EntityModel.Offices.OfficePlanOption> CreateOfficePlanOption(int officeId, int planId, [FromQuery] opoDto opo)
         {
-            EntityModel.Offices.OfficePlanOption officePlanOption = new EntityModel.Offices.OfficePlanOption();
-
+            var planOption = _blPlan.GetPlanOption(planId);
+            var office = _blOffice.Get(officeId);
+            var plan = _blPlan.GetPlan(planId);
 
             if (_blOfficePlanOption.Get(officeId, planId) == null)
             {
-                if (_blOffice.Get(officeId) != null && _blPlan.GetPlan(planId) != null)
+                if (office != null && plan != null)
                 {
-                    officePlanOption.FromDate = opo.FromDate;
-                    officePlanOption.ToDate = opo.ToDate;
-                    officePlanOption.Capacity = opo.Capacity;
-                    officePlanOption.Status = true;
+                    if (opo.FromDate >= planOption.FromDate && opo.ToDate <= planOption.ToDate)
+                    {
+                        EntityModel.Offices.OfficePlanOption officePlanOption = new EntityModel.Offices.OfficePlanOption();
 
-                    _blOfficePlanOption.Create(officeId, planId, officePlanOption);
+                        officePlanOption.FromDate = opo.FromDate;
+                        officePlanOption.ToDate = opo.ToDate;
+                        officePlanOption.Capacity = opo.Capacity;
+                        officePlanOption.Status = true;
 
-                    return Ok("OPO Was Added Successfully");
+                        _blOfficePlanOption.Create(office, plan, officePlanOption);
+
+                        return Ok("OPO Was Added Successfully");
+                    }
+                    else
+                    {
+                        return Conflict("Selected Date Times Has Conflict With Plan Date Range");
+                    }
                 }
                 else
                 {

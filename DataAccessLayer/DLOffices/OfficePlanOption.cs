@@ -1,4 +1,6 @@
-﻿using EntityModel.Offices.Interfaces;
+﻿using EntityModel.Offices;
+using EntityModel.Offices.Interfaces;
+using EntityModel.Plans;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLOffices
@@ -11,24 +13,18 @@ namespace DataAccessLayer.DLOffices
             _databaseContext = new DatabaseContext();
         }
 
-        public void Create(int officeId, int planId, EntityModel.Offices.OfficePlanOption officePlan)
+        public void Create(EntityModel.Offices.Office office, EntityModel.Plans.Plan plan, EntityModel.Offices.OfficePlanOption officePlan)
         {
-            var office = _databaseContext.Offices.FirstOrDefault(o => o.Id == officeId);
-            var plan = _databaseContext.Plans.FirstOrDefault(p => p.Id == planId);
+            officePlan.Office = office;
+            officePlan.Plan = plan;
 
-            if (office != null && plan != null)
-            {
-                officePlan.Office = office;
-                officePlan.Plan = plan;
+            plan.OfficePlanOptions.Add(officePlan);
+            office.OfficePlanOptions.Add(officePlan);
+            _databaseContext.OfficePlanOptions.Add(officePlan);
 
-                plan.OfficePlanOptions.Add(officePlan);
-                office.OfficePlanOptions.Add(officePlan);
-                _databaseContext.OfficePlanOptions.Add(officePlan);
-
-                _databaseContext.Plans.Update(plan);
-                _databaseContext.Offices.Update(office);
-                _databaseContext.SaveChanges();
-            }
+            _databaseContext.Plans.Update(plan);
+            _databaseContext.Offices.Update(office);
+            _databaseContext.SaveChanges();
         }
 
         public void Delete(int officeId, int planId)

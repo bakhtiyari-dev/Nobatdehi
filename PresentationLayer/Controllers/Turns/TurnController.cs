@@ -1,6 +1,6 @@
-﻿using EntityModel.Turns;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
+using System.Globalization;
 
 namespace PresentationLayer.Controllers.Turns.Turn
 {
@@ -15,7 +15,8 @@ namespace PresentationLayer.Controllers.Turns.Turn
         BusinessLogicLayer.BLTurns.Citizen _blCitizen;
         BusinessLogicLayer.BLOffices.OfficePlanOption _blOpo;
         BusinessLogicLayer.BLTurns.TurnPool _blPool;
-        public TurnController() 
+        BusinessLogicLayer.BLOffices.WeekPlan _blWeek;
+        public TurnController()
         {
             _blTurn = new BusinessLogicLayer.BLTurns.Turn();
             _blOffice = new BusinessLogicLayer.BLOffices.Office();
@@ -23,6 +24,7 @@ namespace PresentationLayer.Controllers.Turns.Turn
             _blCitizen = new BusinessLogicLayer.BLTurns.Citizen();
             _blOpo = new BusinessLogicLayer.BLOffices.OfficePlanOption();
             _blPool = new BusinessLogicLayer.BLTurns.TurnPool();
+            _blWeek = new BusinessLogicLayer.BLOffices.WeekPlan();
         }
         [HttpGet]
         public List<EntityModel.Turns.Turn>? GetAllOTurns()
@@ -37,49 +39,101 @@ namespace PresentationLayer.Controllers.Turns.Turn
         }
 
         [HttpPost]
-        public IActionResult CreateTurn(TurnDto turnDto)
+        public ActionResult<EntityModel.Turns.Turn>? CreateTurn([FromQuery] TurnDto turnDto)
         {
             var office = _blOffice.Get(turnDto.OfficeId);
 
-            if (office != null) 
+            if (office != null && office.Status != false)
             {
                 var plan = _blPlan.GetPlan(turnDto.PlanId);
 
-                if (plan != null)
+                if (plan != null && plan.Status != null)
                 {
                     var citizen = _blCitizen.Get(turnDto.CitizenId);
 
                     if (citizen != null)
                     {
-                        var turn = new EntityModel.Turns.Turn();
+                        bool repeatedCitizen = _blTurn.IsCitizenExist(turnDto.CitizenId, turnDto.PlanId);
 
-                        turn.PhoneNumber = turnDto.CitizenPhoneNumber;
-                        turn.UserId = turnDto.UserId;
-                        turn.TurnTime = DateTime.Now;
-                        turn.Office = office;
-                        turn.Plan = plan;
-                        turn.Citizen = citizen;
-                        turn.Status = true;
+                        if (!repeatedCitizen)
+                        {
+                            var officePlan = _blOpo.Get(turnDto.OfficeId, turnDto.PlanId);
 
-                        _blTurn.Create(turn);
+                            if (officePlan != null && officePlan.Status != null)
+                            {
+
+                                if (officePlan.Capacity > 0)
+                                {
+                                    var weekPlan = _blWeek.GetWeekPlan(officePlan.Id);
+
+                                    if (weekPlan != null)
+                                    {
+                                        var planOption = _blPlan.GetPlanOption(turnDto.PlanId);
+
+                                        PersianCalendar persianCalendar = new PersianCalendar();
+                                        DateTime dateTime = DateTime.Now;
+
+                                        int persianYear = persianCalendar.GetYear(dateTime);
+                                        int persianMounth = persianCalendar.GetMonth(dateTime);
+                                        int persianDay = persianCalendar.GetDayOfMonth(dateTime);
+
+                                        DateOnly now = new(persianYear,persianMounth,persianDay+1);
+
+                                        if (now >= officePlan.FromDate && now <= officePlan.ToDate)
+                                        {
+                                            var turn = new EntityModel.Turns.Turn();
+
+                                            turn.PhoneNumber = turnDto.CitizenPhoneNumber;
+                                            turn.UserId = turnDto.UserId;
+                                            turn.TurnTime = _blPool.GetTurnTime(now, officePlan);
+                                            turn.OfficeId = office.Id;
+                                            turn.PlanId = plan.Id;
+                                            turn.CitizenId = citizen.Id;
+                                            turn.Status = true;
+
+                                            _blTurn.Create(turn, officePlan);
+
+                                            return Ok(turn);
+                                        }
+                                        else
+                                        {
+                                            return Conflict("Registration Time Of This Office Plan Option Is Over!");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return NotFound("The WorkPlan Was Not Found!");
+                                    }
+                                }
+                                else
+                                {
+                                    return Conflict("The Capacity Of This Plan Is Over!");
+                                }
+                            }
+                            else
+                            {
+                                return NotFound("Office Plan Option Was Not Found!");
+                            }
+                        }
+                        else
+                        {
+                            return Conflict("This Citizen Has Already Chosen This Plan!");
+                        }
                     }
                     else
                     {
-                        Ok("Submited Citizen Not Found!");
+                        return NotFound("Submited Citizen Was Not Found!");
                     }
                 }
                 else
                 {
-                    Ok("Submited Plan Not Found!");
+                    return NotFound("Submited Plan Was Not Found!");
                 }
             }
             else
             {
-                Ok("Submited Office Not Found!");
+                return NotFound("Submited Office Was Not Found!");
             }
-
-
-            return Ok("GET ALL");
         }
 
         [HttpDelete("{id}")]
@@ -98,6 +152,11 @@ namespace PresentationLayer.Controllers.Turns.Turn
 
             if (opo != null)
             {
+                if (_blPool.isOpoExist(opo.Id))
+                {
+                    _blPool.Delete(opo.Id);
+                }
+
                 return Ok(await _blPool.buldturns(opo));
             }
 
