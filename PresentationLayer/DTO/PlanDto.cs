@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PresentationLayer.Validations;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace PresentationLayer.DTO
@@ -15,7 +16,7 @@ namespace PresentationLayer.DTO
         public DateOnly FromDate { get; set; }
         [Required]
         public DateOnly ToDate { get; set; }
-        [Length(6,12)]
+        [CitizenCodeType]
         public required string CitizenIdType { get; set; }
         [Required]
         public bool GeneralCreationFlag { get; set; }
@@ -33,7 +34,7 @@ namespace PresentationLayer.DTO
     {
         public DateOnly? FromDate { get; set; }
         public DateOnly? ToDate { get; set; }
-        [Length(6, 12)]
+        [CitizenCodeType]
         public string? CitizenIdType { get; set; }
         public bool? GeneralCreationFlag { get; set; }
         [Range(1, 60)]
