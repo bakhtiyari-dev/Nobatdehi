@@ -4,6 +4,7 @@ using EntityModel.Turns;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using EntityModel.Users;
 
 namespace DataAccessLayer
 {
@@ -47,22 +48,17 @@ namespace DataAccessLayer
                     "PlanDependencies",
                     j => j.HasOne<Plan>().WithMany().HasForeignKey("Dependencies"),
                     j => j.HasOne<Plan>().WithMany().HasForeignKey("PlanId"));
+
+            modelBuilder.Entity<CostumIdentityUser>()
+                .HasOne(u => u.Office)
+                .WithMany(o => o.Users)
+                .HasForeignKey(u => u.OfficeId)
+                .IsRequired(false);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Server=.; Initial Catalog=Nobatdehi;User ID=loey;Password=Amir_2001; Encrypt=False");
         }
-    }
-
-    public class CostumIdentityUser : IdentityUser
-    {
-        public required string FirstName { get; set; }
-        public required string LastName { get; set; }
-        public bool Status { get; set; }
-
-        //Relations
-
-        public int OfficeId { get; set; }
     }
 }
