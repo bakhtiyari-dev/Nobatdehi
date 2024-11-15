@@ -2,6 +2,7 @@
 using DataAccessLayer;
 using EntityModel.Turns;
 using EntityModel.Turns.Interfaces;
+using EntityModel.Plans;
 
 namespace BusinessLogicLayer.BLPlans
 {
@@ -52,6 +53,11 @@ namespace BusinessLogicLayer.BLPlans
         public EntityModel.Plans.PlanOption? GetPlanOption(int id)
         {
             return _dlPlan.GetPlanOption(id);
+        }
+
+        public IEnumerable<PlanOption> GetAllPlans()
+        {
+            return _dlPlan.GetAllPlans();
         }
 
 

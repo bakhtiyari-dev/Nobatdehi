@@ -118,6 +118,10 @@ namespace DataAccessLayer.DLPlans
             return _dbContext.PlanOptions.FirstOrDefault(p => p.Id == id);
         }
 
+        public IEnumerable<EntityModel.Plans.PlanOption> GetAllPlans()
+        {
+            return _dbContext.PlanOptions.Include(p => p.Plan).ToList();
+        }
 
         // DAL : Plan Dependencies
 

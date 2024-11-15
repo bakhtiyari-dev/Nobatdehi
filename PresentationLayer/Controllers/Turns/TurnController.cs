@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
 using System.Globalization;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Turns.Turn
 {
@@ -16,6 +17,7 @@ namespace PresentationLayer.Controllers.Turns.Turn
         BusinessLogicLayer.BLOffices.OfficePlanOption _blOpo;
         BusinessLogicLayer.BLTurns.TurnPool _blPool;
         BusinessLogicLayer.BLOffices.WeekPlan _blWeek;
+        BusinessLogicLayer.Application.ApplicationMethods _application;
         public TurnController()
         {
             _blTurn = new BusinessLogicLayer.BLTurns.Turn();
@@ -25,11 +27,27 @@ namespace PresentationLayer.Controllers.Turns.Turn
             _blOpo = new BusinessLogicLayer.BLOffices.OfficePlanOption();
             _blPool = new BusinessLogicLayer.BLTurns.TurnPool();
             _blWeek = new BusinessLogicLayer.BLOffices.WeekPlan();
+            _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
         [HttpGet]
-        public List<EntityModel.Turns.Turn>? GetAllOTurns()
+        public IActionResult GetAllOTurns([FromQuery] PaginationDto pagination)
         {
-            return _blTurn.GetAll();
+            var turns = _blTurn.GetAll();
+
+            if (turns != null)
+            {
+                try
+                {
+                    var result = _application.GetPaginatedResult(turns, pagination.PageNumber, pagination.PageSize);
+                    return Ok(result);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return NotFound("NotFound Any Turns");
         }
 
         [HttpGet("{id}")]

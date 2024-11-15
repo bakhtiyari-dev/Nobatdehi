@@ -1,6 +1,7 @@
 ﻿using EntityModel.Plans;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
+using System.Collections;
 
 namespace PresentationLayer.Controllers.Plans.Plan
 {
@@ -9,18 +10,35 @@ namespace PresentationLayer.Controllers.Plans.Plan
     public class PlanController : ControllerBase
     {
         private BusinessLogicLayer.BLPlans.Plan _blPlan;
+        private BusinessLogicLayer.Application.ApplicationMethods _application;
         public PlanController()
         {
             _blPlan = new BusinessLogicLayer.BLPlans.Plan();
+            _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
         //Plan
 
         [HttpGet]
 
-        public ActionResult<IQueryable>? GetAllPlans()
+        public ActionResult GetAllPlans([FromQuery] PaginationDto pagination)
         {
-            return Ok(_blPlan.GetAll());
+            var plans = _blPlan.GetAllPlans();
+
+            if (plans != null)
+            {
+                try
+                {
+                    var result = _application.GetPaginatedResult(plans, pagination.PageNumber, pagination.PageSize);
+                    return Ok(result);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return NotFound("NotFound Any Plans");
         }
 
         [HttpGet("{id}")]

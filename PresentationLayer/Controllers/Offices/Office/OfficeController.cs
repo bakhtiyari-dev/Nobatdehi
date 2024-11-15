@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using PresentationLayer.DTO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.Office
 {
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
 
@@ -11,16 +14,33 @@ namespace PresentationLayer.Controllers.Offices.Office
     {
         private BusinessLogicLayer.BLOffices.Office _blOffice;
         private BusinessLogicLayer.BLOffices.OfficePlanOption _blOfficePlanOption;
+        private BusinessLogicLayer.Application.ApplicationMethods _application;
         public OfficeController()
         {
             _blOffice = new BusinessLogicLayer.BLOffices.Office();
             _blOfficePlanOption = new BusinessLogicLayer.BLOffices.OfficePlanOption();
+            _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
         [HttpGet]
-        public ActionResult<EntityModel.Offices.Office>? GetAllOffices()
+        public ActionResult<EntityModel.Offices.Office>? GetAllOffices([FromQuery] PaginationDto pagination)
         {
-            return Ok(_blOffice.GetAll());
+            var offices = _blOffice.GetAll();
+
+            if (offices != null)
+            {
+                try
+                {
+                    var result = _application.GetPaginatedResult(offices, pagination.PageNumber, pagination.PageSize);
+                    return Ok(result);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return NotFound("NotFound Any Offices");
         }
 
         [HttpGet("{id}")]

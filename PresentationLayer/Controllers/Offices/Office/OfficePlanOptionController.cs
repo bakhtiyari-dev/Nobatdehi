@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.OfficePlanOption
 {
@@ -11,6 +12,7 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         private BusinessLogicLayer.BLOffices.OfficePlanOption _blOfficePlanOption;
         private BusinessLogicLayer.BLOffices.Office _blOffice;
         private BusinessLogicLayer.BLPlans.Plan _blPlan;
+        private BusinessLogicLayer.Application.ApplicationMethods _application;
         public OfficePlanOptionController()
         {
             _blOfficePlanOption = new BusinessLogicLayer.BLOffices.OfficePlanOption();
@@ -26,9 +28,24 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         }
 
         [HttpGet]
-        public List<EntityModel.Offices.OfficePlanOption>? GetOfficePlanOptionList()
+        public IActionResult GetOfficePlanOptionList([FromQuery] PaginationDto pagination)
         {
-            return _blOfficePlanOption.GetAll();
+            var officePlans = _blOfficePlanOption.GetAll();
+
+            if (officePlans != null)
+            {
+                try
+                {
+                    var result = _application.GetPaginatedResult(officePlans, pagination.PageNumber, pagination.PageSize);
+                    return Ok(result);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return NotFound("NotFound Any OfficePlanOptions");
         }
 
         [HttpPost]

@@ -1,5 +1,7 @@
 ﻿using EntityModel.Turns;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.DTO;
 using System.ComponentModel;
 
 namespace PresentationLayer.Controllers.Turns.Citizen
@@ -8,16 +10,33 @@ namespace PresentationLayer.Controllers.Turns.Citizen
     [ApiController]
     public class CitizenController : ControllerBase
     {
+        private BusinessLogicLayer.Application.ApplicationMethods _application;
         private BusinessLogicLayer.BLTurns.Citizen _blCitizen;
-        public CitizenController()
+        public CitizenController(/*SignInManager*/)
         {
             _blCitizen = new BusinessLogicLayer.BLTurns.Citizen();
+            _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
         [HttpGet]
-        public List<EntityModel.Turns.Citizen>? GetAllCitizens()
+        public IActionResult GetAllCitizens([FromQuery] PaginationDto pagination)
         {
-            return _blCitizen.GetAllCitizens();
+            var citizens = _blCitizen.GetAllCitizens();
+
+            if (citizens != null)
+            {
+                try
+                {
+                    var result = _application.GetPaginatedResult(citizens, pagination.PageNumber, pagination.PageSize);
+                    return Ok(result);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            
+            return NotFound("NotFound Any Citizens");
         }
 
         [HttpGet("{id}")]
