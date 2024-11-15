@@ -1,9 +1,12 @@
 ﻿using EntityModel.Plans.Interfaces;
 using DataAccessLayer;
+using EntityModel.Turns;
+using EntityModel.Turns.Interfaces;
+using EntityModel.Plans;
 
 namespace BusinessLogicLayer.BLPlans
 {
-    public class Plan:IPlan,IPlanDependency
+    public class Plan:IPlan,IPlanDependency,IPlanCapacity
     {
         private DatabaseContext _dbContext = new DatabaseContext();
         private DataAccessLayer.DLPlans.Plan _dlPlan;
@@ -52,6 +55,11 @@ namespace BusinessLogicLayer.BLPlans
             return _dlPlan.GetPlanOption(id);
         }
 
+        public IEnumerable<PlanOption> GetAllPlans()
+        {
+            return _dlPlan.GetAllPlans();
+        }
+
 
         // BLL : Plan Dependencies
 
@@ -85,5 +93,25 @@ namespace BusinessLogicLayer.BLPlans
         {
             return _dlPlan.CheckExist(independentId, dependentId);
         }
+
+
+        // BLL : Capacity
+
+
+        public void IncreaseCapacity(int officeId, int planId, int capacity)
+        {
+            _dlPlan.IncreaseCapacity(officeId, planId, capacity);
+        }
+
+        public void DecreaseCapacity(int officeId, int planId, int capacity)
+        {
+            _dlPlan.DecreaseCapacity(officeId, planId, capacity);
+        }
+
+        public void SetCapacity(int officeId, int planId, int capacity)
+        {
+            _dlPlan.SetCapacity(officeId, planId, capacity);
+        }
+
     }
 }

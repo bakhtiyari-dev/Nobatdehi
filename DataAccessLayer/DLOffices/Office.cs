@@ -9,6 +9,7 @@ namespace DataAccessLayer.DLOffices
         {
         }
 
+
         public void Create(EntityModel.Offices.Office office)
         {
             _dbContext.Offices.Add(office);
@@ -49,6 +50,15 @@ namespace DataAccessLayer.DLOffices
                 _dbContext.Offices.Update(office);
                 _dbContext.SaveChanges();
             }
+        }
+        
+        public void AddUser(int officeId, EntityModel.Users.CostumIdentityUser user)
+        {
+            var office = _dbContext.Offices.FirstOrDefault(o => o.Id == officeId);
+
+            office.Users.Add(user);
+            _dbContext.Update(office);
+            _dbContext.SaveChanges();
         }
     }
 }

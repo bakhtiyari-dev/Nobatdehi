@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EntityModel.Turns;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using PresentationLayer.DTO;
+using System.ComponentModel;
 
 namespace PresentationLayer.Controllers.Turns.Citizen
 {
@@ -6,25 +10,39 @@ namespace PresentationLayer.Controllers.Turns.Citizen
     [ApiController]
     public class CitizenController : ControllerBase
     {
-        public enum IdType
+        private BusinessLogicLayer.Application.ApplicationMethods _application;
+        private BusinessLogicLayer.BLTurns.Citizen _blCitizen;
+        public CitizenController(/*SignInManager*/)
         {
-            auto,
-            Passport,
-            UniqId,
-            HouseholdId,
-            ExclusiveId
+            _blCitizen = new BusinessLogicLayer.BLTurns.Citizen();
+            _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
         [HttpGet]
-        public IActionResult GetAllCitizens()
+        public IActionResult GetAllCitizens([FromQuery] PaginationDto pagination)
         {
-            return Ok("GET ALL");
+            var citizens = _blCitizen.GetAllCitizens();
+
+            if (citizens != null)
+            {
+                try
+                {
+                    var result = _application.GetPaginatedResult(citizens, pagination.PageNumber, pagination.PageSize);
+                    return Ok(result);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+            
+            return NotFound("NotFound Any Citizens");
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCitizenById(int id = 0, [FromQuery] IdType idType = IdType.auto)
+        public List<EntityModel.Turns.Citizen>? GetCitizenById(string id)
         {
-            return Ok("GET ALL");
+            return _blCitizen.GetCitizensById(id);
         }
     }
 }

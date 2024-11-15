@@ -1,28 +1,34 @@
-﻿using DataAccessLayer;
+﻿using Microsoft.AspNetCore.Mvc;
 using EntityModel.Offices.Interfaces;
 
 namespace BusinessLogicLayer.BLOffices
 {
     public class WeekPlan : IWeekPlan
     {
-        private DatabaseContext _dbContext = new DatabaseContext();
+        DataAccessLayer.DLOffices.WeekPlan _dlWeek;
         public WeekPlan()
         {
-
-        }
-        public void Create(EntityModel.Offices.WeekPlan weekPlan)
-        {
-            throw new NotImplementedException();
+            _dlWeek = new DataAccessLayer.DLOffices.WeekPlan();
         }
 
-        public void Delete(int id)
+        public void Create(int opoId, EntityModel.Offices.WeekPlan weekPlan)
         {
-            throw new NotImplementedException();
+            _dlWeek.Create(opoId, weekPlan);
         }
 
-        public void Update(int id, EntityModel.Offices.WeekPlan newWeekPlan)
+        public void Delete(EntityModel.Offices.WeekPlan weekPlan)
         {
-            throw new NotImplementedException();
+            _dlWeek.Delete(weekPlan);
+        }
+
+        public EntityModel.Offices.WeekPlan? GetWeekPlan(int opoId)
+        {
+            return _dlWeek.GetWeekPlan(opoId);
+        }
+
+        public void Update(int opoId, EntityModel.Offices.WeekPlan newWeekPlan)
+        {
+            _dlWeek.Update(opoId, newWeekPlan);
         }
     }
 }

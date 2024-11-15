@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.OfficePlanOption
 {
@@ -9,9 +10,14 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
     public class OfficePlanOptionController : ControllerBase
     {
         private BusinessLogicLayer.BLOffices.OfficePlanOption _blOfficePlanOption;
+        private BusinessLogicLayer.BLOffices.Office _blOffice;
+        private BusinessLogicLayer.BLPlans.Plan _blPlan;
+        private BusinessLogicLayer.Application.ApplicationMethods _application;
         public OfficePlanOptionController()
         {
             _blOfficePlanOption = new BusinessLogicLayer.BLOffices.OfficePlanOption();
+            _blOffice = new BusinessLogicLayer.BLOffices.Office();
+            _blPlan = new BusinessLogicLayer.BLPlans.Plan();
         }
 
         [HttpGet("{officeId}/{planId}")]
@@ -22,31 +28,67 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         }
 
         [HttpGet]
-        public List<EntityModel.Offices.OfficePlanOption>? GetOfficePlanOptionList()
+        public IActionResult GetOfficePlanOptionList([FromQuery] PaginationDto pagination)
         {
-            return _blOfficePlanOption.GetAll();
+            var officePlans = _blOfficePlanOption.GetAll();
+
+            if (officePlans != null)
+            {
+                try
+                {
+                    var result = _application.GetPaginatedResult(officePlans, pagination.PageNumber, pagination.PageSize);
+                    return Ok(result);
+                }
+                catch (ArgumentException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+            }
+
+            return NotFound("NotFound Any OfficePlanOptions");
         }
 
         [HttpPost]
-        public IActionResult CreateOfficePlanOption(int officeId, int planId, [FromQuery] opoDto opo)
+        public ActionResult<EntityModel.Offices.OfficePlanOption> CreateOfficePlanOption(int officeId, int planId, [FromQuery] opoDto opo)
         {
-            EntityModel.Offices.OfficePlanOption officePlanOption = new EntityModel.Offices.OfficePlanOption();
+            var planOption = _blPlan.GetPlanOption(planId);
+            var office = _blOffice.Get(officeId);
+            var plan = _blPlan.GetPlan(planId);
 
             if (_blOfficePlanOption.Get(officeId, planId) == null)
             {
-                officePlanOption.FromDate = opo.FromDate;
-                officePlanOption.ToDate = opo.ToDate;
-                officePlanOption.Capacity = opo.Capacity;
-                officePlanOption.Status = true;
+                if (office != null && plan != null)
+                {
+                    if (opo.FromDate >= planOption.FromDate && opo.ToDate <= planOption.ToDate)
+                    {
+                        EntityModel.Offices.OfficePlanOption officePlanOption = new EntityModel.Offices.OfficePlanOption();
 
-                _blOfficePlanOption.Create(officeId, planId, officePlanOption);
+                        officePlanOption.FromDate = opo.FromDate;
+                        officePlanOption.ToDate = opo.ToDate;
+                        officePlanOption.Capacity = opo.Capacity;
+                        officePlanOption.Status = true;
+
+                        _blOfficePlanOption.Create(office, plan, officePlanOption);
+
+                        return Ok("OPO Was Added Successfully");
+                    }
+                    else
+                    {
+                        return Conflict("Selected Date Times Has Conflict With Plan Date Range");
+                    }
+                }
+                else
+                {
+                    return NotFound("Office Or Plan Was Not Found");
+                }
+
             }
 
-            return Ok("Create");
+            return Conflict("There Are OPO For This Office And Plan");
         }
 
         [HttpPut]
-        public IQueryable? UpdateOfficePlanOption(int officeId, int planId, [FromQuery] uopoDto uopo)
+        public ActionResult<EntityModel.Offices.OfficePlanOption>? UpdateOfficePlanOption(int officeId, int planId, [FromQuery] uopoDto uopo)
         {
             var officePlan = _blOfficePlanOption.Get(officeId, planId);
 
@@ -59,36 +101,32 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
                     officePlan.Capacity = uopo.Capacity ?? officePlan.Capacity;
 
                     _blOfficePlanOption.Update(officeId, planId, officePlan);
+
+                    return Ok(_blOfficePlanOption.Get(officeId, planId));
                 }
                 else
                 {
-                    return $"this Office Plan Option has disabled!".AsQueryable();
+                    return Conflict("this Office Plan Option has disabled!");
                 }
             }
-            else
-            {
-                return $"not find Office Plan Option with id: {officeId}{planId}!".AsQueryable();
-            }
 
 
-            return "Update".AsQueryable();
+            return NotFound("OPO Was Not Found");
         }
 
         [HttpDelete]
-        public IQueryable? DeleteOfficePlanOption(int officeId, int planId)
+        public ActionResult<EntityModel.Offices.OfficePlanOption>? DeleteOfficePlanOption(int officeId, int planId)
         {
             var officePlan = _blOfficePlanOption.Get(officeId, planId);
 
             if (officePlan != null)
             {
                 _blOfficePlanOption.Delete(officeId, planId);
-            }
-            else
-            {
-                return $"not find Office Plan Option with id: {officeId}{planId}!".AsQueryable();
+
+                return Ok(_blOfficePlanOption.Get(officeId, planId));
             }
 
-            return "Ok".AsQueryable();
+            return NotFound("OPO Was Not Found");
         }
     }
 }

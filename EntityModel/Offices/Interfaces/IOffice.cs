@@ -7,5 +7,6 @@
         public void Delete(int id);
         public List<Office>? GetAll();
         public Office? Get(int id);
+        public void AddUser(int officeId, Users.CostumIdentityUser user);
     }
 }

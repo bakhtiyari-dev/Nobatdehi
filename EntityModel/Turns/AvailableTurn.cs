@@ -11,6 +11,7 @@ namespace EntityModel.Turns
 
         //Relations
 
+        public int TurnPoolId { get; set; }
         public TurnPool TurnPool { get; set; }
 
     }

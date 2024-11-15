@@ -15,19 +15,29 @@ namespace PresentationLayer.Controllers.Plans.PlanDependency
 
 
         [HttpGet("dependency/{id}")]
-        public IQueryable? GetDependency(int id)
+        public ActionResult<IQueryable>? GetDependency(int id)
         {
-            return _blPlan.GetDependency(id) ?? $"Error: not find any dependencies for plan with this id ({id})".AsQueryable();
+            var result = _blPlan.GetDependency(id);
+            if (result != null) 
+            {
+                return Ok(result);
+            }
+            return  NotFound($"not found any dependencies for plan with this id ({id})");
         }
 
         [HttpGet("dependency")]
-        public IQueryable? GetAllDependencies()
+        public ActionResult<IQueryable>? GetAllDependencies()
         {
-            return _blPlan.GetAllDependencies() ?? $"Error: not find any plan dependencies".AsQueryable();
+            var result = _blPlan.GetAllDependencies();
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound($"not found any dependencies");
         }
 
         [HttpPost("dependency")]
-        public IQueryable? CreateDependency(int independentId, int dependentId)
+        public ActionResult<IQueryable>? CreateDependency(int independentId, int dependentId)
         {
             if (!_blPlan.CheckConflict(independentId, dependentId))
             {
@@ -35,13 +45,13 @@ namespace PresentationLayer.Controllers.Plans.PlanDependency
             }
             else
             {
-                return $"Error: this action make conflict in dependencies !".AsQueryable();
+                return Conflict("this action make conflict in dependencies");
             }
-            return _blPlan.GetDependency(independentId) ?? $"Error: not find any dependencies for plan with this id ({independentId})".AsQueryable();
+            return GetDependency(independentId);
         }
 
         [HttpDelete("dependency")]
-        public IQueryable? DeleteDependency(int independentId, int dependentId)
+        public ActionResult<IQueryable>? DeleteDependency(int independentId, int dependentId)
         {
             if (_blPlan.CheckExist(independentId, dependentId))
             {
@@ -49,9 +59,9 @@ namespace PresentationLayer.Controllers.Plans.PlanDependency
             }
             else
             {
-                return $"Error: Both plans must be available !".AsQueryable();
+                return NotFound("Both plans must be available");
             }
-            return _blPlan.GetAllDependencies() ?? $"Error: not find any plan dependencies".AsQueryable();
+            return GetAllDependencies();
         }
     }
 }

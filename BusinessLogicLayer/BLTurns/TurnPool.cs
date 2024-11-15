@@ -1,24 +1,35 @@
 ﻿using EntityModel.Turns.Interfaces;
 using DataAccessLayer;
+using EntityModel.Offices;
 
 namespace BusinessLogicLayer.BLTurns
 {
     public class TurnPool:ITurnPool
     {
-        private DatabaseContext _dbContext = new DatabaseContext();
+        private DataAccessLayer.DLTurns.TurnPool _dlPool;
         public TurnPool()
         {
-            
+            _dlPool = new DataAccessLayer.DLTurns.TurnPool();
         }
 
-        public void Create(EntityModel.Turns.TurnPool turnPool)
+        public async Task<string> buldturns(OfficePlanOption opo)
         {
-            throw new NotImplementedException();
+            return await _dlPool.buldturns(opo);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _dlPool.Delete(id);
+        }
+
+        public DateTime GetTurnTime(DateOnly day, OfficePlanOption opo)
+        {
+            return _dlPool.GetTurnTime(day, opo);
+        }
+
+        public bool isOpoExist(int id)
+        {
+            return _dlPool.isOpoExist(id);
         }
 
         public void Update(int id, EntityModel.Turns.TurnPool newTurnPool)

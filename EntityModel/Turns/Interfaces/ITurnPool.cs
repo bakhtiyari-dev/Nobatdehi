@@ -1,9 +1,14 @@
-﻿namespace EntityModel.Turns.Interfaces
+﻿using EntityModel.Offices;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EntityModel.Turns.Interfaces
 {
     public interface ITurnPool
     {
-        public void Create(TurnPool turnPool);
+        public DateTime GetTurnTime(DateOnly day, OfficePlanOption opo);
+        public Task<string> buldturns(OfficePlanOption opoId);
         public void Update(int id, TurnPool newTurnPool);
         public void Delete(int id);
+        public bool isOpoExist(int id);
     }
 }

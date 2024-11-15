@@ -1,7 +1,7 @@
 ﻿using EntityModel.Turns;
+using EntityModel.Users;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
 
 namespace EntityModel.Offices
 {
@@ -19,9 +19,7 @@ namespace EntityModel.Offices
 
         public List<Turn> Turns { get; set; } = new List<Turn>();
         public List<OfficePlanOption> OfficePlanOptions { get; set; } = new List<OfficePlanOption>();
-
-        [MaybeNull]
-        public List<string> UsersID { get; set; }
+        public List<CostumIdentityUser> Users { get; set; } = new List<CostumIdentityUser>();
         public List<DesabledTurn> DesabledTurns { get; set; } = new List<DesabledTurn>();
     }
 }

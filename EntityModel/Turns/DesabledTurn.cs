@@ -13,7 +13,10 @@ namespace EntityModel.Turns
 
         //Relations
 
+        public int PlanId { get; set; }
         public Plan Plan { get; set; }
+
+        public int OfficeId { get; set; }
         public Office Office { get; set; }
     }
 }

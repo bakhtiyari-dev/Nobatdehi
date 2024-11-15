@@ -1,4 +1,6 @@
-﻿using EntityModel.Offices.Interfaces;
+﻿using EntityModel.Offices;
+using EntityModel.Offices.Interfaces;
+using EntityModel.Plans;
 
 namespace BusinessLogicLayer.BLOffices
 {
@@ -9,9 +11,9 @@ namespace BusinessLogicLayer.BLOffices
         {
             _dlOPO = new DataAccessLayer.DLOffices.OfficePlanOption();
         }
-        public void Create(int officeId, int planId, EntityModel.Offices.OfficePlanOption officePlan)
+        public void Create(EntityModel.Offices.Office office, Plan plan, EntityModel.Offices.OfficePlanOption officePlan)
         {
-            _dlOPO.Create(officeId, planId, officePlan);
+            _dlOPO.Create(office, plan, officePlan);
         }
 
         public void Delete(int officeId, int planId)

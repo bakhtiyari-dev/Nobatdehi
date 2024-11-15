@@ -2,10 +2,11 @@
 {
     public class UserDto
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public int OfficeId { get; set; }
+        public required string Role { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string UserName { get; set; }
+        public required string Password { get; set; }
+        public required int OfficeId { get; set; }
     }
 }
