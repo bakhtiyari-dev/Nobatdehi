@@ -13,11 +13,6 @@ namespace DataAccessLayer.DLPlans
             _dbContext = new DatabaseContext();
         }
 
-        public int SetId(int officeId, int planId)
-        {
-            return Convert.ToInt32(officeId.ToString() + planId.ToString());
-        }
-
         public void Create(EntityModel.Plans.Plan plan, EntityModel.Plans.PlanOption planOption)
         {
             _dbContext.Plans.Add(plan);
@@ -241,9 +236,9 @@ namespace DataAccessLayer.DLPlans
         // DAL : Capacity
 
 
-        public void IncreaseCapacity(int officeId, int planId, int capacity)
+        public void IncreaseCapacity(int opoId, int capacity)
         {
-            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == opoId);
 
             if (officePlan != null)
             {
@@ -253,9 +248,9 @@ namespace DataAccessLayer.DLPlans
             }
         }
 
-        public void DecreaseCapacity(int officeId, int planId, int capacity)
+        public void DecreaseCapacity(int opoId, int capacity)
         {
-            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == opoId);
 
             if (officePlan != null)
             {
@@ -267,9 +262,9 @@ namespace DataAccessLayer.DLPlans
             }
         }
 
-        public void SetCapacity(int officeId, int planId, int capacity)
+        public void SetCapacity(int opoId, int capacity)
         {
-            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == SetId(officeId, planId));
+            var officePlan = _dbContext.OfficePlanOptions.FirstOrDefault(o => o.Id == opoId);
 
             if (officePlan != null)
             {

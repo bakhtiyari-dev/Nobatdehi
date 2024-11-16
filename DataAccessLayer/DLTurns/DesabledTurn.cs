@@ -1,4 +1,5 @@
-﻿using EntityModel.Turns.Interfaces;
+﻿using EntityModel.Turns;
+using EntityModel.Turns.Interfaces;
 
 namespace DataAccessLayer.DLTurns
 {
@@ -12,12 +13,19 @@ namespace DataAccessLayer.DLTurns
 
         public void Create(EntityModel.Turns.DesabledTurn desabledTurn)
         {
-            throw new NotImplementedException();
+            _dbContext.desabledTurns.Add(desabledTurn);
+            _dbContext.SaveChanges();
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var turn = _dbContext.desabledTurns.FirstOrDefault(turn => turn.Id == id);
+
+            if (turn != null)
+            {
+                _dbContext.desabledTurns.Remove(turn);
+                _dbContext.SaveChanges();
+            }
         }
 
         public List<EntityModel.Turns.DesabledTurn> GetAll(int officeId, int planId)
@@ -25,9 +33,16 @@ namespace DataAccessLayer.DLTurns
             throw new NotImplementedException();
         }
 
-        public TimeOnly GetDesabledTurnsByDate(int officeId, int planId, DateOnly day)
+        public EntityModel.Turns.DesabledTurn? GetDesabledTurnsByDate(int officeId, int planId, DateOnly day)
         {
-            throw new NotImplementedException();
+            var turns = _dbContext.desabledTurns.Where(turn => turn.Day >= day && turn.OfficeId == officeId && turn.PlanId == planId).OrderBy(turn => turn.Day).ToList();
+
+            if (turns.Count > 0)
+            {
+                return turns.First();
+            }
+
+            return null;
         }
     }
 }

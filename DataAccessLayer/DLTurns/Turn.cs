@@ -61,7 +61,7 @@ namespace DataAccessLayer.DLTurns
 
         public bool IsCitizenExist(int citizenId, int planId)
         {
-            var turn = _dbContext.turns.FirstOrDefault(t => t.CitizenId == citizenId && t.PlanId == planId);
+            var turn = _dbContext.turns.FirstOrDefault(t => t.CitizenId == citizenId && t.PlanId == planId && t.Status == true);
 
             return turn != null;
         }

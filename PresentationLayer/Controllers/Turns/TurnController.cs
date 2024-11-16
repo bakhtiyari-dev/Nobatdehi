@@ -1,11 +1,10 @@
-﻿using EntityModel.Users;
+﻿using EntityModel.Turns;
+using EntityModel.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using System.Diagnostics.Eventing.Reader;
 using System.Globalization;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Turns.Turn
 {
@@ -22,6 +21,7 @@ namespace PresentationLayer.Controllers.Turns.Turn
         BusinessLogicLayer.BLOffices.OfficePlanOption _blOpo;
         BusinessLogicLayer.BLTurns.TurnPool _blPool;
         BusinessLogicLayer.BLOffices.WeekPlan _blWeek;
+        BusinessLogicLayer.BLTurns.DesabledTurn _blDesabledTurn;
         BusinessLogicLayer.Application.ApplicationMethods _application;
         private UserManager<CostumIdentityUser> _userManager;
         public TurnController(UserManager<CostumIdentityUser> userManager)
@@ -33,6 +33,7 @@ namespace PresentationLayer.Controllers.Turns.Turn
             _blOpo = new BusinessLogicLayer.BLOffices.OfficePlanOption();
             _blPool = new BusinessLogicLayer.BLTurns.TurnPool();
             _blWeek = new BusinessLogicLayer.BLOffices.WeekPlan();
+            _blDesabledTurn = new BusinessLogicLayer.BLTurns.DesabledTurn();
             _application = new BusinessLogicLayer.Application.ApplicationMethods();
             _userManager = userManager;
         }
@@ -93,20 +94,13 @@ namespace PresentationLayer.Controllers.Turns.Turn
 
             if (turn != null)
             {
-                if (userRole.ToUpper() == "Admin")
+                if (turn.OfficeId == myUser.OfficeId || userRole.ToUpper() == "ADMIN")
                 {
                     return Ok(turn);
                 }
                 else
                 {
-                    if (turn.OfficeId == myUser.OfficeId)
-                    {
-                        return Ok(turn);
-                    }
-                    else
-                    {
-                        return NotFound("You Can't Find Turns That Submited On Other Offices");
-                    }
+                    return NotFound("You Can't Find Turns That Submited On Other Offices");
                 }
             }
             else
@@ -146,7 +140,7 @@ namespace PresentationLayer.Controllers.Turns.Turn
 
             var myUser = await _userManager.FindByIdAsync(userId);
 
-            if(myUser.Id == turnDto.UserId)
+            if (myUser.Id == turnDto.UserId)
             {
                 var office = _blOffice.Get(turnDto.OfficeId);
 
@@ -195,19 +189,31 @@ namespace PresentationLayer.Controllers.Turns.Turn
 
                                                     if (myUser.OfficeId == turnDto.OfficeId || (myUser.OfficeId != turnDto.OfficeId && planOption.GeneralCreationFlag == true) || userRole.ToUpper() == "ADMIN")
                                                     {
+                                                        var desabledTurn = _blDesabledTurn.GetDesabledTurnsByDate(turnDto.OfficeId, turnDto.PlanId, now);
+                                                        
                                                         var turn = new EntityModel.Turns.Turn();
 
                                                         turn.PhoneNumber = turnDto.CitizenPhoneNumber;
                                                         turn.UserId = turnDto.UserId;
-                                                        turn.TurnTime = _blPool.GetTurnTime(now, officePlan);
                                                         turn.OfficeId = office.Id;
                                                         turn.PlanId = plan.Id;
                                                         turn.CitizenId = citizen.Id;
                                                         turn.Status = true;
 
-                                                        _blTurn.Create(turn, officePlan);
+                                                        if (desabledTurn != null)
+                                                        {
+                                                            turn.TurnTime = now.ToDateTime(desabledTurn.Hour);
+                                                            _blDesabledTurn.Delete(desabledTurn.Id);
+                                                        }
+                                                        else
+                                                        {   
+                                                            turn.TurnTime = _blPool.GetTurnTime(now, officePlan);
+                                                        }
 
-                                                        return Ok(turn);
+                                                        _blTurn.Create(turn, officePlan);
+                                                        _blPlan.DecreaseCapacity(officePlan.Id, 1);
+
+                                                        return Ok("Turn Was Submited Successfully");
                                                     }
                                                     else
                                                     {
@@ -299,21 +305,27 @@ namespace PresentationLayer.Controllers.Turns.Turn
 
             if (turn != null)
             {
-                if (userRole.ToUpper() == "Admin")
+                if (turn.OfficeId == myUser.OfficeId || userRole.ToUpper() == "ADMIN")
                 {
+                    DateOnly date = DateOnly.FromDateTime(turn.TurnTime);
+                    TimeOnly time = TimeOnly.FromDateTime(turn.TurnTime);
+
+                    DesabledTurn desabledTurn = new DesabledTurn()
+                    {
+                        Day = date,
+                        Hour = time,
+                        OfficeId = turn.OfficeId,
+                        PlanId = turn.PlanId
+                    };
+
+                    _blDesabledTurn.Create(desabledTurn);
+                    _blTurn.Delete(id);
+                    
                     return Ok(turn);
                 }
                 else
                 {
-                    if (turn.OfficeId == myUser.OfficeId)
-                    {
-                        _blTurn.Delete(id);
-                        return Ok(turn);
-                    }
-                    else
-                    {
-                        return NotFound("You Can't Find Turns That Submited On Other Offices");
-                    }
+                    return NotFound("You Can't Find Turns That Submited On Other Offices");
                 }
             }
             else

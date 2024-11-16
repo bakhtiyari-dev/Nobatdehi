@@ -165,7 +165,7 @@ namespace DataAccessLayer.DLTurns
         {
             var turnPool = _dbContext.turnPools.Include(a => a.AvailableTurns).FirstOrDefault(t => t.OfficePlanOptionId == opo.Id);
 
-            var turns = turnPool.AvailableTurns.Where(a => a.AvailableTurnDate == day).OrderBy(t => t.AvailableTurnTime).ToList();
+            var turns = turnPool.AvailableTurns.Where(a => a.AvailableTurnDate >= day).OrderBy(t => t.AvailableTurnTime).ToList();
 
             DateTime turnTime = turns[0].AvailableTurnDate.ToDateTime(turns[0].AvailableTurnTime);
 
