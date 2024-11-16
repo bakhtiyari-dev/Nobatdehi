@@ -33,6 +33,7 @@ namespace DataAccessLayer
         public DbSet<Turn> turns { get; set; }
         public DbSet<TurnPool> turnPools { get; set; }
         public DbSet<AvailableTurn> availableTurns { get; set; }
+        public DbSet<DesabledTurn> desabledTurns { get; set; }
         
         //about member
         public DbSet<Citizen> citizens { get; set; }

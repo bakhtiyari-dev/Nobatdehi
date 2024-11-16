@@ -4,10 +4,10 @@ namespace DataAccessLayer.DLTurns
 {
     public class DesabledTurn : IDesabledTurn
     {
-        private DatabaseContext dbContext = new DatabaseContext();
+        private DatabaseContext _dbContext;
         public DesabledTurn()
         {
-
+            _dbContext = new DatabaseContext();
         }
 
         public void Create(EntityModel.Turns.DesabledTurn desabledTurn)
