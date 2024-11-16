@@ -41,14 +41,11 @@ namespace PresentationLayer.Controllers.Users
         [HttpGet]
         public IActionResult LoginStatus () 
         {
-            if (Request.Cookies.ContainsKey(".AspNetCore.Identity.Application"))
-            {
-                return Ok(Request.Cookies[".AspNetCore.Identity.Application"]);
+            if (!User.Identity.IsAuthenticated)
+            { 
+                return Ok("You Need To Login");
             }
-            else
-            {
-                return Ok("There is no cookie");
-            }
+            return Ok("You are already logged in!");
         }
     }
 }
