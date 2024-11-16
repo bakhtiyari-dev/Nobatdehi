@@ -12,7 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Users
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
 

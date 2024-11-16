@@ -6,7 +6,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.Office
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
 

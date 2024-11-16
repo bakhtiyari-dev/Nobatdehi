@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EntityModel.Offices;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.OfficePlanOption
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
 
@@ -18,6 +21,7 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
             _blOfficePlanOption = new BusinessLogicLayer.BLOffices.OfficePlanOption();
             _blOffice = new BusinessLogicLayer.BLOffices.Office();
             _blPlan = new BusinessLogicLayer.BLPlans.Plan();
+            _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
         [HttpGet("{officeId}/{planId}")]
@@ -28,7 +32,7 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         }
 
         [HttpGet]
-        public IActionResult GetOfficePlanOptionList([FromQuery] PaginationDto pagination)
+        public ActionResult<List<EntityModel.Offices.OfficePlanOption>?> GetOfficePlanOptionList([FromQuery] PaginationDto pagination)
         {
             var officePlans = _blOfficePlanOption.GetAll();
 

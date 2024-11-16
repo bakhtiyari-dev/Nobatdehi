@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers.Plans.PlanDependency
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PlanDependencyController : ControllerBase
@@ -47,7 +49,7 @@ namespace PresentationLayer.Controllers.Plans.PlanDependency
             {
                 return Conflict("this action make conflict in dependencies");
             }
-            return GetDependency(independentId);
+            return Ok(_blPlan.GetDependency(independentId));
         }
 
         [HttpDelete("dependency")]

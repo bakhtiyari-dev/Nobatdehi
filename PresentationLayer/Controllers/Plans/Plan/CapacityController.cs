@@ -1,8 +1,10 @@
 ﻿using EntityModel.Offices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers.Plans.PlanCapacity
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CapacityController : Controller
