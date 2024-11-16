@@ -29,6 +29,27 @@ namespace DataAccessLayer.DLTurns
             return true;
         }
 
+        public bool CheckTurnBeforDelete(int citizenId, int planId)
+        {
+            var plans = _dbContext.Plans.Include(d => d.dependentPlans).ToList();
+
+            foreach (var plan in plans)
+            {
+                foreach (var dependent in plan.dependentPlans)
+                {
+                    if(dependent.Id == planId)
+                    {
+                        if(IsCitizenExist(citizenId, plan.Id))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public void Create(EntityModel.Turns.Turn turn, OfficePlanOption officePlan)
         {
             _dbContext.turns.Add(turn);

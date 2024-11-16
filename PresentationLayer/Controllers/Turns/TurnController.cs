@@ -148,7 +148,7 @@ namespace PresentationLayer.Controllers.Turns.Turn
                 {
                     var plan = _blPlan.GetPlan(turnDto.PlanId);
 
-                    if (plan != null && plan.Status != null)
+                    if (plan != null && plan.Status != false)
                     {
                         var citizen = _blCitizen.Get(turnDto.CitizenId);
 
@@ -164,7 +164,7 @@ namespace PresentationLayer.Controllers.Turns.Turn
                                 {
                                     var officePlan = _blOpo.Get(turnDto.OfficeId, turnDto.PlanId);
 
-                                    if (officePlan != null && officePlan.Status != null)
+                                    if (officePlan != null && officePlan.Status != false)
                                     {
 
                                         if (officePlan.Capacity > 0)
@@ -307,21 +307,28 @@ namespace PresentationLayer.Controllers.Turns.Turn
             {
                 if (turn.OfficeId == myUser.OfficeId || userRole.ToUpper() == "ADMIN")
                 {
-                    DateOnly date = DateOnly.FromDateTime(turn.TurnTime);
-                    TimeOnly time = TimeOnly.FromDateTime(turn.TurnTime);
-
-                    DesabledTurn desabledTurn = new DesabledTurn()
+                    if (_blTurn.CheckTurnBeforDelete(turn.CitizenId, turn.PlanId))
                     {
-                        Day = date,
-                        Hour = time,
-                        OfficeId = turn.OfficeId,
-                        PlanId = turn.PlanId
-                    };
+                        DateOnly date = DateOnly.FromDateTime(turn.TurnTime);
+                        TimeOnly time = TimeOnly.FromDateTime(turn.TurnTime);
 
-                    _blDesabledTurn.Create(desabledTurn);
-                    _blTurn.Delete(id);
-                    
-                    return Ok(turn);
+                        DesabledTurn desabledTurn = new DesabledTurn()
+                        {
+                            Day = date,
+                            Hour = time,
+                            OfficeId = turn.OfficeId,
+                            PlanId = turn.PlanId
+                        };
+
+                        _blDesabledTurn.Create(desabledTurn);
+                        _blTurn.Delete(id);
+                        
+                        return Ok(turn);
+                    }
+                    else
+                    {
+                        return Conflict("Dependency Conflict! You Can't Delete This Plan");
+                    }
                 }
                 else
                 {

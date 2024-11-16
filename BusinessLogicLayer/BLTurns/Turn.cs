@@ -17,6 +17,11 @@ namespace BusinessLogicLayer.BLTurns
             return _dlTurn.CheckCitizenHasDependencies(citizen, planId);
         }
 
+        public bool CheckTurnBeforDelete(int citizenId, int planId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Create(EntityModel.Turns.Turn turn, OfficePlanOption officePlan)
         {
             _dlTurn.Create(turn, officePlan);
