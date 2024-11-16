@@ -12,6 +12,11 @@ namespace BusinessLogicLayer.BLTurns
             _dlTurn = new DataAccessLayer.DLTurns.Turn();
         }
 
+        public bool CheckCitizenHasDependencies(int citizen, int planId)
+        {
+            return _dlTurn.CheckCitizenHasDependencies(citizen, planId);
+        }
+
         public void Create(EntityModel.Turns.Turn turn, OfficePlanOption officePlan)
         {
             _dlTurn.Create(turn, officePlan);

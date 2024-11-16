@@ -110,12 +110,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler("/error");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.MapGet("/", () => "Nobatdehi Web Application");
+app.MapGet("/error", () => "Pleas Try Again With Currect Data!");
 
 app.Run();
 
