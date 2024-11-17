@@ -1,10 +1,9 @@
-﻿using EntityModel.Turns.Interfaces;
-using DataAccessLayer;
-using EntityModel.Offices;
+﻿using EntityModel.Offices;
+using EntityModel.Turns.Interfaces;
 
 namespace BusinessLogicLayer.BLTurns
 {
-    public class TurnPool:ITurnPool
+    public class TurnPool : ITurnPool
     {
         private DataAccessLayer.DLTurns.TurnPool _dlPool;
         public TurnPool()

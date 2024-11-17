@@ -1,5 +1,4 @@
 ﻿using EntityModel.Plans;
-using EntityModel.Turns;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,6 +7,8 @@ namespace EntityModel.Offices
     [Table("OfficePlanOptions", Schema = "Option")]
     public class OfficePlanOption
     {
+        public Plan plan;
+
         public int Id { get; set; }
         public DateOnly FromDate { get; set; }
         public DateOnly ToDate { get; set; }

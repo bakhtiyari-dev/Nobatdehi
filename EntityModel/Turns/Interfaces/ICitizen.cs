@@ -1,6 +1,4 @@
-﻿using EntityModel.Turns;
-
-namespace EntityModel.Turns.Interfaces
+﻿namespace EntityModel.Turns.Interfaces
 {
     public interface ICitizen
     {

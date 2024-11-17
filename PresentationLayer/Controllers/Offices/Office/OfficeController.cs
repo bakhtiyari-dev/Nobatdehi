@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+﻿using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.Office
 {
@@ -25,73 +22,190 @@ namespace PresentationLayer.Controllers.Offices.Office
         [HttpGet]
         public ActionResult<EntityModel.Offices.Office>? GetAllOffices([FromQuery] PaginationDto pagination)
         {
-            var offices = _blOffice.GetAll();
-
-            if (offices != null)
+            if (User.Identity.IsAuthenticated)
             {
-                try
+                var userClims = User.Claims;
+
+                foreach (var item in userClims)
                 {
-                    var result = _application.GetPaginatedResult(offices, pagination.PageNumber, pagination.PageSize);
-                    return Ok(result);
+                    if (item.Type.Contains("role"))
+                    {
+                        if (item.Value.ToUpper() != "ADMIN")
+                        {
+                            return NotFound("You Are Not Access To This Api");
+                        }
+                    }
                 }
-                catch (ArgumentException ex)
+                // Start Controller Code
+
+                var offices = _blOffice.GetAll();
+
+                if (offices != null)
                 {
-                    return BadRequest(ex.Message);
+                    try
+                    {
+                        var result = _application.GetPaginatedResult(offices, pagination.PageNumber, pagination.PageSize);
+                        return Ok(result);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        return BadRequest(ex.Message);
+                    }
                 }
+
+                return NotFound("NotFound Any Offices");
+
+                // End Controller Code
+            }
+            else
+            {
+                return NotFound("Can't Find Your Data, Pleas Login Again");
             }
 
-            return NotFound("NotFound Any Offices");
         }
 
         [HttpGet("{id}")]
         public ActionResult<EntityModel.Offices.Office>? GetOfficeById(int id)
         {
-            return Ok(_blOffice.Get(id));
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userClims = User.Claims;
+
+                foreach (var item in userClims)
+                {
+                    if (item.Type.Contains("role"))
+                    {
+                        if (item.Value.ToUpper() != "ADMIN")
+                        {
+                            return NotFound("You Are Not Access To This Api");
+                        }
+                    }
+                }
+
+                return Ok(_blOffice.Get(id));
+            }
+            else
+            {
+                return NotFound("Can't Find Your Data, Pleas Login Again");
+            }
         }
 
         [HttpPost]
         public IActionResult CreateOffice([FromQuery] OfficeDto officeDto)
         {
-            EntityModel.Offices.Office office = new EntityModel.Offices.Office()
+            if (User.Identity.IsAuthenticated)
             {
-                City = officeDto.City,
-                PhoneNumber = officeDto.PhoneNumber,
-                Status = true
-            };
-            _blOffice.Create(office);
-            return Ok("Office was added successfully");
-        }
+                var userClims = User.Claims;
 
+                foreach (var item in userClims)
+                {
+                    if (item.Type.Contains("role"))
+                    {
+                        if (item.Value.ToUpper() != "ADMIN")
+                        {
+                            return NotFound("You Are Not Access To This Api");
+                        }
+                    }
+                }
+                // Start Controller Code
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateOffice(int id, [FromQuery] OfficeDto officeDto)
-        {
-            if (_blOffice.Get(id) != null)
-            {
                 EntityModel.Offices.Office office = new EntityModel.Offices.Office()
                 {
                     City = officeDto.City,
                     PhoneNumber = officeDto.PhoneNumber,
                     Status = true
                 };
+                _blOffice.Create(office);
 
-                _blOffice.Update(id, office);
-                return Ok("Office was updated successfully");
+                return Ok("Office was added successfully");
+
+                // End Controller Code
+            }
+            else
+            {
+                return NotFound("Can't Find Your Data, Pleas Login Again");
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateOffice(int id, [FromQuery] OfficeDto officeDto)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userClims = User.Claims;
+
+                foreach (var item in userClims)
+                {
+                    if (item.Type.Contains("role"))
+                    {
+                        if (item.Value.ToUpper() != "ADMIN")
+                        {
+                            return NotFound("You Are Not Access To This Api");
+                        }
+                    }
+                }
+                // Start Controller Code
+
+                if (_blOffice.Get(id) != null)
+                {
+                    EntityModel.Offices.Office office = new EntityModel.Offices.Office()
+                    {
+                        City = officeDto.City,
+                        PhoneNumber = officeDto.PhoneNumber,
+                        Status = true
+                    };
+
+                    _blOffice.Update(id, office);
+                    return Ok("Office was updated successfully");
+                }
+
+                return NotFound("Office Was Not Found");
+
+                // End Controller Code
+            }
+            else
+            {
+                return NotFound("Can't Find Your Data, Pleas Login Again");
             }
 
-            return NotFound("Office Was Not Found");
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteOffice(int id)
         {
-            if(_blOffice.Get(id) != null)
+            if (User.Identity.IsAuthenticated)
             {
-                _blOffice.Delete(id);
-                return Ok("Office was desabled successfully");
+                var userClims = User.Claims;
+
+                foreach (var item in userClims)
+                {
+                    if (item.Type.Contains("role"))
+                    {
+                        if (item.Value.ToUpper() != "ADMIN")
+                        {
+                            return NotFound("You Are Not Access To This Api");
+                        }
+                    }
+                }
+                // Start Controller Code
+
+                if (_blOffice.Get(id) != null)
+                {
+                    _blOffice.Delete(id);
+                    return Ok("Office was desabled successfully");
+                }
+
+                return NotFound("Office Was Not Found");
+
+                // End Controller Code
+            }
+            else
+            {
+                return NotFound("Can't Find Your Data, Pleas Login Again");
             }
 
-            return NotFound("Office Was Not Found");
         }
     }
 }

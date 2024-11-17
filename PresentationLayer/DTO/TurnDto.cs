@@ -6,11 +6,13 @@ namespace PresentationLayer.DTO
     public class TurnDto
     {
         [PhoneNumber]
-        public string CitizenPhoneNumber { get; set; }
-        public string UserId { get; set; }
-        [CitizenCode]
-        public int CitizenId { get; set; }
-        public int PlanId { get; set; }
-        public int OfficeId { get; set; }
+        public required string CitizenPhoneNumber { get; set; }
+        public required string UserId { get; set; }
+        [Range(1,100000)]
+        public required int CitizenId { get; set; }
+        [Range(1, 100000)]
+        public required int PlanId { get; set; }
+        [Range(1, 100000)]
+        public required int OfficeId { get; set; }
     }
 }

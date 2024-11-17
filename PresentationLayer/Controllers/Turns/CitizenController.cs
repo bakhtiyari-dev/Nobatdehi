@@ -1,11 +1,10 @@
-﻿using EntityModel.Turns;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using System.ComponentModel;
 
 namespace PresentationLayer.Controllers.Turns.Citizen
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CitizenController : ControllerBase
@@ -35,7 +34,7 @@ namespace PresentationLayer.Controllers.Turns.Citizen
                     return BadRequest(ex.Message);
                 }
             }
-            
+
             return NotFound("NotFound Any Citizens");
         }
 

@@ -1,12 +1,10 @@
-﻿using EntityModel.Plans.Interfaces;
-using DataAccessLayer;
-using EntityModel.Turns;
-using EntityModel.Turns.Interfaces;
+﻿using DataAccessLayer;
 using EntityModel.Plans;
+using EntityModel.Plans.Interfaces;
 
 namespace BusinessLogicLayer.BLPlans
 {
-    public class Plan:IPlan,IPlanDependency,IPlanCapacity
+    public class Plan : IPlan, IPlanDependency, IPlanCapacity
     {
         private DatabaseContext _dbContext = new DatabaseContext();
         private DataAccessLayer.DLPlans.Plan _dlPlan;
@@ -98,19 +96,19 @@ namespace BusinessLogicLayer.BLPlans
         // BLL : Capacity
 
 
-        public void IncreaseCapacity(int officeId, int planId, int capacity)
+        public void IncreaseCapacity(int opoId, int capacity)
         {
-            _dlPlan.IncreaseCapacity(officeId, planId, capacity);
+            _dlPlan.IncreaseCapacity(opoId, capacity);
         }
 
-        public void DecreaseCapacity(int officeId, int planId, int capacity)
+        public void DecreaseCapacity(int opoId, int capacity)
         {
-            _dlPlan.DecreaseCapacity(officeId, planId, capacity);
+            _dlPlan.DecreaseCapacity(opoId, capacity);
         }
 
-        public void SetCapacity(int officeId, int planId, int capacity)
+        public void SetCapacity(int opoId, int capacity)
         {
-            _dlPlan.SetCapacity(officeId, planId, capacity);
+            _dlPlan.SetCapacity(opoId, capacity);
         }
 
     }

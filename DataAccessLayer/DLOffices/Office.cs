@@ -5,6 +5,10 @@ namespace DataAccessLayer.DLOffices
     public class Office:IOffice
     {
         private DatabaseContext _dbContext = new DatabaseContext();
+
+        public int Id { get; internal set; }
+        public string City { get; internal set; }
+
         public Office() 
         {
         }

@@ -1,24 +1,23 @@
 ﻿using EntityModel.Turns.Interfaces;
-using DataAccessLayer;
 
 namespace BusinessLogicLayer.BLTurns
 {
     public class DesabledTurn : IDesabledTurn
     {
-        private DatabaseContext dbContext = new DatabaseContext();
+        DataAccessLayer.DLTurns.DesabledTurn _dlTurn;
         public DesabledTurn()
         {
-
+            _dlTurn = new DataAccessLayer.DLTurns.DesabledTurn();
         }
 
         public void Create(EntityModel.Turns.DesabledTurn desabledTurn)
         {
-            throw new NotImplementedException();
+            _dlTurn.Create(desabledTurn);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            _dlTurn.Delete(id);
         }
 
         public List<EntityModel.Turns.DesabledTurn> GetAll(int officeId, int planId)
@@ -26,9 +25,9 @@ namespace BusinessLogicLayer.BLTurns
             throw new NotImplementedException();
         }
 
-        public TimeOnly GetDesabledTurnsByDate(int officeId, int planId, DateOnly day)
+        public EntityModel.Turns.DesabledTurn? GetDesabledTurnsByDate(int officeId, int planId, DateOnly day)
         {
-            throw new NotImplementedException();
+            return _dlTurn.GetDesabledTurnsByDate(officeId, planId, day);
         }
     }
 }

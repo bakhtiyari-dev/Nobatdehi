@@ -1,8 +1,10 @@
 ﻿using EntityModel.Offices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PresentationLayer.Controllers.Plans.PlanCapacity
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class CapacityController : Controller
@@ -20,11 +22,14 @@ namespace PresentationLayer.Controllers.Plans.PlanCapacity
         [HttpPost]
         public ActionResult<OfficePlanOption>? IncreaseCapacity(int officeId, int planId, int amountToIncrease)
         {
-            if (_blOfficePlan.Get(officeId, planId) != null)
+            var officePlan = _blOfficePlan.Get(officeId, planId);
+
+            if (officePlan != null)
             {
-                _blPlan.IncreaseCapacity(officeId, planId, amountToIncrease);
-                
-                return Ok(_blOfficePlan.Get(officeId, planId));
+                _blPlan.IncreaseCapacity(officePlan.Id, amountToIncrease);
+
+                var result = _blOfficePlan.Get(officeId, planId);
+                return Ok(result);
             }
 
             return NotFound("OPO Was Not Found");
@@ -33,9 +38,11 @@ namespace PresentationLayer.Controllers.Plans.PlanCapacity
         [HttpPut]
         public ActionResult<OfficePlanOption>? SetCapacity(int officeId, int planId, int amountToSet)
         {
-            if (_blOfficePlan.Get(officeId, planId) != null)
+            var officePlan = _blOfficePlan.Get(officeId, planId);
+
+            if (officePlan != null)
             {
-                _blPlan.SetCapacity(officeId, planId, amountToSet);
+                _blPlan.SetCapacity(officePlan.Id, amountToSet);
 
                 return Ok(_blOfficePlan.Get(officeId, planId));
             }
@@ -46,9 +53,11 @@ namespace PresentationLayer.Controllers.Plans.PlanCapacity
         [HttpDelete]
         public ActionResult<OfficePlanOption>? DecreaseCapacity(int officeId, int planId, int amountToReduce)
         {
-            if (_blOfficePlan.Get(officeId, planId) != null)
+            var officePlan = _blOfficePlan.Get(officeId, planId);
+
+            if (officePlan != null)
             {
-                _blPlan.DecreaseCapacity(officeId, planId, amountToReduce);
+                _blPlan.DecreaseCapacity(officePlan.Id, amountToReduce);
 
                 return Ok(_blOfficePlan.Get(officeId, planId));
             }

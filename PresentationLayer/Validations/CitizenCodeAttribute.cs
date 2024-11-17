@@ -28,7 +28,7 @@ namespace PresentationLayer.Validations
                 return ValidationResult.Success;
             }
 
-            return new ValidationResult("Pleas Submit Currect Citizen Type Between : ( PASSPORT, EXCLUSIVE, UNIQ, FAMILY )");
+            return new ValidationResult("Pleas Submit Currect Citizen Code");
         }
     }
 }

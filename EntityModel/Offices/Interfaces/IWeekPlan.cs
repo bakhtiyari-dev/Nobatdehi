@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace EntityModel.Offices.Interfaces
+﻿namespace EntityModel.Offices.Interfaces
 {
     public interface IWeekPlan
     {

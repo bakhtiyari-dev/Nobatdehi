@@ -1,6 +1,5 @@
 ﻿using EntityModel.Offices;
 using EntityModel.Plans;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EntityModel.Turns
@@ -23,6 +22,6 @@ namespace EntityModel.Turns
 
         public int PlanId { get; set; }
         public Plan Plan { get; set; }
- 
+
     }
 }

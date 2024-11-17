@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using EntityModel.Offices.Interfaces;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+﻿using EntityModel.Offices.Interfaces;
 
 namespace DataAccessLayer.DLOffices
 {
@@ -38,7 +36,7 @@ namespace DataAccessLayer.DLOffices
 
             if (check != null)
             {
-                EntityModel.Offices.WeekPlan weekPlan = (EntityModel.Offices.WeekPlan) check;
+                EntityModel.Offices.WeekPlan weekPlan = (EntityModel.Offices.WeekPlan)check;
 
                 weekPlan.SaterdayFirstHour = newWeekPlan.SaterdayFirstHour;
                 weekPlan.SaterdayLasttHour = newWeekPlan.SaterdayLasttHour;

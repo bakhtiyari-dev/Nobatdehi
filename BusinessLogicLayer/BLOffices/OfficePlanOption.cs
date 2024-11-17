@@ -1,5 +1,4 @@
-﻿using EntityModel.Offices;
-using EntityModel.Offices.Interfaces;
+﻿using EntityModel.Offices.Interfaces;
 using EntityModel.Plans;
 
 namespace BusinessLogicLayer.BLOffices
@@ -7,7 +6,7 @@ namespace BusinessLogicLayer.BLOffices
     public class OfficePlanOption : IOfficePlanOption
     {
         DataAccessLayer.DLOffices.OfficePlanOption _dlOPO;
-        public OfficePlanOption() 
+        public OfficePlanOption()
         {
             _dlOPO = new DataAccessLayer.DLOffices.OfficePlanOption();
         }

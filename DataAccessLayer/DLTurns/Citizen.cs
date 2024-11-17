@@ -1,9 +1,8 @@
 ﻿using EntityModel.Turns.Interfaces;
-using EntityModel.Turns;
 
 namespace DataAccessLayer.DLTurns
 {
-    public class Citizen: ICitizen
+    public class Citizen : ICitizen
     {
         private DatabaseContext _dbContext;
         public Citizen()

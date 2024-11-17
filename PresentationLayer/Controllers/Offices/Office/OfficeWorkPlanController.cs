@@ -1,9 +1,11 @@
 ﻿using EntityModel.Offices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
 
 namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class OfficeWorkPlanController : ControllerBase
@@ -26,7 +28,7 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
                 return Ok(_blWeek.GetWeekPlan(opo.Id));
             }
@@ -40,7 +42,7 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
             var opo = _blOpo.Get(officeId, PlanId);
 
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
                 var check = _blWeek.GetWeekPlan(opo.Id);
 
@@ -72,12 +74,9 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
 
                     _blWeek.Create(opo.Id, weekPlan);
 
-                    if (_blPool.isOpoExist(opo.Id))
-                    {
-                        _blPool.Delete(opo.Id);
-                    }
+                    var turns = await _blPool.buldturns(opo);
 
-                    return Ok("WeekPlan Was Added Seccessfully" + Environment.NewLine + await _blPool.buldturns(opo));
+                    return Ok("WeekPlan Was Added Seccessfully" + Environment.NewLine + turns);
                 }
                 else
                 {
@@ -92,13 +91,13 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         }
 
         [HttpPut]
-        public IActionResult UpdateWorkPlan(int officeId, int PlanId,[FromQuery] uWeekPlanDto weekPlanDto)
+        public async Task<IActionResult> UpdateWorkPlan(int officeId, int PlanId,[FromQuery] uWeekPlanDto weekPlanDto)
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
-                var check = _blWeek.GetWeekPlan(Convert.ToInt32(officeId.ToString() + PlanId.ToString()));
+                var check = _blWeek.GetWeekPlan(opo.Id);
 
                 if (check != null)
                 {
@@ -129,7 +128,12 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
 
                     _blWeek.Update(opo.Id, weekPlan);
 
-                    return Ok("WeekPlan Was Updated Seccessfully");
+                    if (_blPool.isOpoExist(opo.Id))
+                    {
+                        _blPool.Delete(opo.Id);
+                    }
+
+                    return Ok("WeekPlan Was Updated Seccessfully" + Environment.NewLine + await _blPool.buldturns(opo));
                 }
                 else
                 {
@@ -147,13 +151,19 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
                 var check = _blWeek.GetWeekPlan(opo.Id);
 
                 if (check != null)
                 {
                     _blWeek.Delete(check);
+
+                    if (_blPool.isOpoExist(opo.Id))
+                    {
+                        _blPool.Delete(opo.Id);
+                    }
+
                     return Ok("WeekPlan Was Deleted Seccessfully");
                 }
                 else

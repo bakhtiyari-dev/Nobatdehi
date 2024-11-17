@@ -1,15 +1,24 @@
-﻿using EntityModel.Turns.Interfaces;
-using DataAccessLayer;
-using EntityModel.Offices;
+﻿using EntityModel.Offices;
+using EntityModel.Turns.Interfaces;
 
 namespace BusinessLogicLayer.BLTurns
 {
-    public class Turn:ITurn
+    public class Turn : ITurn
     {
         DataAccessLayer.DLTurns.Turn _dlTurn;
         public Turn()
         {
             _dlTurn = new DataAccessLayer.DLTurns.Turn();
+        }
+
+        public bool CheckCitizenHasDependencies(int citizen, int planId)
+        {
+            return _dlTurn.CheckCitizenHasDependencies(citizen, planId);
+        }
+
+        public bool CheckTurnBeforDelete(int citizenId, int planId)
+        {
+            return _dlTurn.CheckTurnBeforDelete(citizenId, planId);
         }
 
         public void Create(EntityModel.Turns.Turn turn, OfficePlanOption officePlan)

@@ -1,13 +1,9 @@
 ﻿using EntityModel.Turns.Interfaces;
-using EntityModel.Offices;
-using DataAccessLayer.DLOffices;
-using EntityModel.Plans;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLTurns
 {
-    public class TurnPool:ITurnPool
+    public class TurnPool : ITurnPool
     {
         private DatabaseContext _dbContext;
         public TurnPool()
@@ -27,7 +23,7 @@ namespace DataAccessLayer.DLTurns
                 };
                 turnPool.AvailableTurns.Add(availableTurn);
                 await _dbContext.availableTurns.AddAsync(availableTurn);
-                
+
             }
             try
             {
@@ -46,7 +42,7 @@ namespace DataAccessLayer.DLTurns
         {
             var weekplan = _dbContext.WeekPlans.FirstOrDefault(w => w.OfficePlanOptionId == opo.Id);
             var planoption = _dbContext.PlanOptions.FirstOrDefault(po => po.Id == opo.Plan.Id);
-            
+
             if (weekplan != null)
             {
                 EntityModel.Turns.TurnPool turnPool = new EntityModel.Turns.TurnPool()
@@ -67,7 +63,7 @@ namespace DataAccessLayer.DLTurns
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -80,7 +76,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -93,7 +89,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -106,7 +102,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -119,7 +115,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -132,7 +128,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -145,7 +141,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -165,7 +161,7 @@ namespace DataAccessLayer.DLTurns
         {
             var turnPool = _dbContext.turnPools.Include(a => a.AvailableTurns).FirstOrDefault(t => t.OfficePlanOptionId == opo.Id);
 
-            var turns = turnPool.AvailableTurns.Where(a => a.AvailableTurnDate == day).OrderBy(t => t.AvailableTurnTime).ToList();
+            var turns = turnPool.AvailableTurns.Where(a => a.AvailableTurnDate >= day).OrderBy(t => t.AvailableTurnDate).ToList();
 
             DateTime turnTime = turns[0].AvailableTurnDate.ToDateTime(turns[0].AvailableTurnTime);
 
@@ -191,7 +187,7 @@ namespace DataAccessLayer.DLTurns
         {
             throw new NotImplementedException();
         }
-        
+
         public void Delete(int id)
         {
             var pool = _dbContext.turnPools.FirstOrDefault(p => p.OfficePlanOptionId == id);

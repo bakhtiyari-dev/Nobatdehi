@@ -1,10 +1,11 @@
 ﻿using EntityModel.Plans;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using System.Collections;
 
 namespace PresentationLayer.Controllers.Plans.Plan
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PlanController : ControllerBase
