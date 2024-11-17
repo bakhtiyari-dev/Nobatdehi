@@ -28,7 +28,7 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
                 return Ok(_blWeek.GetWeekPlan(opo.Id));
             }
@@ -42,7 +42,7 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
             var opo = _blOpo.Get(officeId, PlanId);
 
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
                 var check = _blWeek.GetWeekPlan(opo.Id);
 
@@ -95,7 +95,7 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
                 var check = _blWeek.GetWeekPlan(opo.Id);
 
@@ -151,13 +151,19 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
         {
             var opo = _blOpo.Get(officeId, PlanId);
 
-            if (opo != null)
+            if (opo != null && opo.Status != false)
             {
                 var check = _blWeek.GetWeekPlan(opo.Id);
 
                 if (check != null)
                 {
                     _blWeek.Delete(check);
+
+                    if (_blPool.isOpoExist(opo.Id))
+                    {
+                        _blPool.Delete(opo.Id);
+                    }
+
                     return Ok("WeekPlan Was Deleted Seccessfully");
                 }
                 else

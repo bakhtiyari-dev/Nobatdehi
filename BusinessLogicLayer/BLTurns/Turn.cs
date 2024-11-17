@@ -19,7 +19,7 @@ namespace BusinessLogicLayer.BLTurns
 
         public bool CheckTurnBeforDelete(int citizenId, int planId)
         {
-            throw new NotImplementedException();
+            return _dlTurn.CheckTurnBeforDelete(citizenId, planId);
         }
 
         public void Create(EntityModel.Turns.Turn turn, OfficePlanOption officePlan)

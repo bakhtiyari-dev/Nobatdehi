@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20241116114734_Desabled_Turns")]
-    partial class Desabled_Turns
+    [Migration("20241117073038_Initial_Migration")]
+    partial class Initial_Migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

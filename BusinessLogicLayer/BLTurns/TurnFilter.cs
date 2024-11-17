@@ -15,7 +15,7 @@ namespace BusinessLogicLayer.BLTurns
             _dlFilter = new DataAccessLayer.DLTurns.TurnFilter(); 
         }
 
-        public List<EntityModel.Turns.Turn>? GetAllTurnsByCitizen(int citizenId)
+        public List<EntityModel.Turns.Turn>? GetAllTurnsByCitizen(string citizenId)
         {
             return _dlFilter.GetAllTurnsByCitizen(citizenId);
         }

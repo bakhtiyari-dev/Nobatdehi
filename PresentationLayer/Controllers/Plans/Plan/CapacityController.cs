@@ -27,8 +27,9 @@ namespace PresentationLayer.Controllers.Plans.PlanCapacity
             if (officePlan != null)
             {
                 _blPlan.IncreaseCapacity(officePlan.Id, amountToIncrease);
-                
-                return Ok(_blOfficePlan.Get(officeId, planId));
+
+                var result = _blOfficePlan.Get(officeId, planId);
+                return Ok(result);
             }
 
             return NotFound("OPO Was Not Found");

@@ -5,6 +5,10 @@ namespace DataAccessLayer.DLOffices
     public class Office:IOffice
     {
         private DatabaseContext _dbContext = new DatabaseContext();
+
+        public int Id { get; internal set; }
+        public string City { get; internal set; }
+
         public Office() 
         {
         }
@@ -56,13 +60,9 @@ namespace DataAccessLayer.DLOffices
         {
             var office = _dbContext.Offices.FirstOrDefault(o => o.Id == officeId);
 
-            if (office != null)
-            {
-                office.Users.Add(user);
-                _dbContext.Update(office);
-                _dbContext.SaveChanges();
-            }
-
+            office.Users.Add(user);
+            _dbContext.Update(office);
+            _dbContext.SaveChanges();
         }
     }
 }

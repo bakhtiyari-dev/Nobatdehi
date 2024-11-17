@@ -42,12 +42,35 @@ namespace DataAccessLayer.DLOffices
 
         public EntityModel.Offices.OfficePlanOption? Get(int officeId, int planId)
         {
-            return _databaseContext.OfficePlanOptions.Include(o => o.Office).Include(o => o.Plan).FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
+            var result = _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
+
+            return result;
         }
 
         public List<EntityModel.Offices.OfficePlanOption>? GetAll()
         {
-            return _databaseContext.OfficePlanOptions.ToList();
+            var result = _databaseContext.OfficePlanOptions.Include(opo => opo.Office).Include(opo => opo.Plan).Select(opo => new EntityModel.Offices.OfficePlanOption
+            {
+                Id = opo.Id,
+                Capacity = opo.Capacity,
+                Status = opo.Status,
+                FromDate = opo.FromDate,
+                ToDate = opo.ToDate,
+
+                Office = new EntityModel.Offices.Office {
+                    Id = opo.Office.Id,
+                    City = opo.Office.City
+                },
+                Plan = new EntityModel.Plans.Plan
+                {
+                    Id = opo.Plan.Id,
+                    Name = opo.Plan.Name
+                }
+            }).ToList();
+
+            //return _databaseContext.OfficePlanOptions.ToList();
+
+            return result;
         }
 
         public void Update(int officeId, int planId, EntityModel.Offices.OfficePlanOption newOfficePlan)

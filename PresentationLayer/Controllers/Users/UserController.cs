@@ -182,9 +182,9 @@ namespace PresentationLayer.Controllers.Users
                 return NotFound(new { message = "User not found" });
 
             user.Status = false;
-            var result = await _userManager.UpdateAsync(user);
+            var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
-                return Ok(new { message = "User desabled successfully!" });
+                return Ok(new { message = "User deleted successfully!" });
 
             foreach (var error in result.Errors)
                 ModelState.AddModelError(string.Empty, error.Description);

@@ -15,12 +15,16 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         private BusinessLogicLayer.BLOffices.OfficePlanOption _blOfficePlanOption;
         private BusinessLogicLayer.BLOffices.Office _blOffice;
         private BusinessLogicLayer.BLPlans.Plan _blPlan;
+        private BusinessLogicLayer.BLOffices.WeekPlan _blWeek;
+        private BusinessLogicLayer.BLTurns.TurnPool _blPool;
         private BusinessLogicLayer.Application.ApplicationMethods _application;
         public OfficePlanOptionController()
         {
             _blOfficePlanOption = new BusinessLogicLayer.BLOffices.OfficePlanOption();
             _blOffice = new BusinessLogicLayer.BLOffices.Office();
             _blPlan = new BusinessLogicLayer.BLPlans.Plan();
+            _blWeek = new BusinessLogicLayer.BLOffices.WeekPlan();
+            _blPool = new BusinessLogicLayer.BLTurns.TurnPool();
             _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
@@ -94,26 +98,32 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         public ActionResult<EntityModel.Offices.OfficePlanOption>? UpdateOfficePlanOption(int officeId, int planId, [FromQuery] uopoDto uopo)
         {
             var officePlan = _blOfficePlanOption.Get(officeId, planId);
+            var planOption = _blPlan.GetPlanOption(planId);
 
             if (officePlan != null)
             {
                 if (officePlan.Status)
                 {
-                    officePlan.FromDate = uopo.FromDate ?? officePlan.FromDate;
-                    officePlan.ToDate = uopo.ToDate ?? officePlan.ToDate;
-                    officePlan.Capacity = uopo.Capacity ?? officePlan.Capacity;
+                    if (officePlan.FromDate >= planOption.FromDate && officePlan.ToDate <= planOption.ToDate)
+                    {
+                        officePlan.FromDate = uopo.FromDate ?? officePlan.FromDate;
+                        officePlan.ToDate = uopo.ToDate ?? officePlan.ToDate;
+                        officePlan.Capacity = uopo.Capacity ?? officePlan.Capacity;
 
-                    _blOfficePlanOption.Update(officeId, planId, officePlan);
+                        _blOfficePlanOption.Update(officeId, planId, officePlan);
 
-                    return Ok(_blOfficePlanOption.Get(officeId, planId));
+                        return Ok(_blOfficePlanOption.Get(officeId, planId));
+                    }
+                    else
+                    {
+                        return Conflict("Selected Date Times Has Conflict With Plan Date Range");
+                    }
                 }
                 else
                 {
                     return Conflict("this Office Plan Option has disabled!");
                 }
             }
-
-
             return NotFound("OPO Was Not Found");
         }
 
@@ -122,11 +132,23 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         {
             var officePlan = _blOfficePlanOption.Get(officeId, planId);
 
-            if (officePlan != null)
-            {
+            if (officePlan != null && officePlan.Status != false)
+            {                
+                var check = _blWeek.GetWeekPlan(officePlan.Id);
+
+                if (check != null)
+                {
+                    _blWeek.Delete(check);
+
+                    if (_blPool.isOpoExist(officePlan.Id))
+                    {
+                        _blPool.Delete(officePlan.Id);
+                    }
+                }
+
                 _blOfficePlanOption.Delete(officeId, planId);
 
-                return Ok(_blOfficePlanOption.Get(officeId, planId));
+                return Ok("OPO Was Desabled Successfully");
             }
 
             return NotFound("OPO Was Not Found");

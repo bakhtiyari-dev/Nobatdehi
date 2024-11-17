@@ -10,9 +10,9 @@ namespace DataAccessLayer.DLTurns
             _dbContext = new DatabaseContext();
         }
 
-        public List<EntityModel.Turns.Turn>? GetAllTurnsByCitizen(int citizenId)
+        public List<EntityModel.Turns.Turn>? GetAllTurnsByCitizen(string citizenId)
         {
-            return _dbContext.turns.Where(t => t.CitizenId == citizenId).ToList();
+            return _dbContext.turns.Where(t => t.CitizenId.ToString() == citizenId || t.Citizen.Passport == citizenId || t.Citizen.ExclusiveCode == citizenId || t.Citizen.UniqCode == citizenId || t.Citizen.HouseholdCode == citizenId).ToList();
         }
 
         public List<EntityModel.Turns.Turn>? GetAllTurnsByOffice(int officeId)
