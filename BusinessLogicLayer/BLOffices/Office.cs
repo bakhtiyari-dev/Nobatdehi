@@ -1,12 +1,11 @@
 ﻿using EntityModel.Offices.Interfaces;
-using DataAccessLayer;
 
 namespace BusinessLogicLayer.BLOffices
 {
     public class Office : IOffice
     {
         DataAccessLayer.DLOffices.Office _dlOffice;
-        public Office() 
+        public Office()
         {
             _dlOffice = new DataAccessLayer.DLOffices.Office();
         }
@@ -35,7 +34,7 @@ namespace BusinessLogicLayer.BLOffices
         {
             _dlOffice.Update(id, newOffice);
         }
-        
+
         public void AddUser(int officeId, EntityModel.Users.CostumIdentityUser user)
         {
             _dlOffice.AddUser(officeId, user);

@@ -1,6 +1,5 @@
 ﻿using EntityModel.Offices;
 using Microsoft.AspNetCore.Identity;
-using System.Diagnostics.CodeAnalysis;
 
 namespace EntityModel.Users
 {

@@ -1,5 +1,4 @@
-﻿using EntityModel.Turns;
-using EntityModel.Turns.Interfaces;
+﻿using EntityModel.Turns.Interfaces;
 
 namespace DataAccessLayer.DLTurns
 {

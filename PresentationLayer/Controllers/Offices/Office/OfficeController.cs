@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.Internal;
+﻿using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.Office
 {
@@ -79,7 +76,7 @@ namespace PresentationLayer.Controllers.Offices.Office
                 {
                     if (item.Type.Contains("role"))
                     {
-                        if(item.Value.ToUpper() != "ADMIN")
+                        if (item.Value.ToUpper() != "ADMIN")
                         {
                             return NotFound("You Are Not Access To This Api");
                         }
@@ -91,7 +88,7 @@ namespace PresentationLayer.Controllers.Offices.Office
             else
             {
                 return NotFound("Can't Find Your Data, Pleas Login Again");
-            }   
+            }
         }
 
         [HttpPost]

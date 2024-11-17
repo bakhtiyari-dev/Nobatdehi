@@ -1,6 +1,4 @@
 ﻿using EntityModel.Plans.Interfaces;
-using EntityModel.Turns;
-using EntityModel.Turns.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLPlans

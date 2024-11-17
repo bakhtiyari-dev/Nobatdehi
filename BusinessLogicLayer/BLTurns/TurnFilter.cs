@@ -1,9 +1,4 @@
 ﻿using EntityModel.Turns.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BusinessLogicLayer.BLTurns
 {
@@ -12,7 +7,7 @@ namespace BusinessLogicLayer.BLTurns
         private DataAccessLayer.DLTurns.TurnFilter _dlFilter;
         public TurnFilter()
         {
-            _dlFilter = new DataAccessLayer.DLTurns.TurnFilter(); 
+            _dlFilter = new DataAccessLayer.DLTurns.TurnFilter();
         }
 
         public List<EntityModel.Turns.Turn>? GetAllTurnsByCitizen(string citizenId)

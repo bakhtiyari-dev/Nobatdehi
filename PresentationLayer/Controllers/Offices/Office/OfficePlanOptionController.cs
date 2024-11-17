@@ -1,8 +1,6 @@
-﻿using EntityModel.Offices;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Offices.OfficePlanOption
 {
@@ -133,7 +131,7 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
             var officePlan = _blOfficePlanOption.Get(officeId, planId);
 
             if (officePlan != null && officePlan.Status != false)
-            {                
+            {
                 var check = _blWeek.GetWeekPlan(officePlan.Id);
 
                 if (check != null)

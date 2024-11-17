@@ -1,6 +1,4 @@
-﻿using EntityModel.Offices;
-using EntityModel.Offices.Interfaces;
-using EntityModel.Plans;
+﻿using EntityModel.Offices.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLayer.DLOffices
@@ -57,7 +55,8 @@ namespace DataAccessLayer.DLOffices
                 FromDate = opo.FromDate,
                 ToDate = opo.ToDate,
 
-                Office = new EntityModel.Offices.Office {
+                Office = new EntityModel.Offices.Office
+                {
                     Id = opo.Office.Id,
                     City = opo.Office.City
                 },

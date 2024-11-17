@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace PresentationLayer.Controllers.Turns
 {
@@ -15,12 +13,12 @@ namespace PresentationLayer.Controllers.Turns
         private BusinessLogicLayer.Application.ApplicationMethods _application;
         public TurnFilterController()
         {
-            _blFilter = new BusinessLogicLayer.BLTurns.TurnFilter();    
+            _blFilter = new BusinessLogicLayer.BLTurns.TurnFilter();
             _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
         [HttpGet("ByDateTime")]
-        public ActionResult<List<EntityModel.Turns.Turn>?> GetTurnsByDateTime([FromQuery] PaginationDto pagination, [FromQuery] TurnFilterDto.TurnFilterByDate filterDto) 
+        public ActionResult<List<EntityModel.Turns.Turn>?> GetTurnsByDateTime([FromQuery] PaginationDto pagination, [FromQuery] TurnFilterDto.TurnFilterByDate filterDto)
         {
             var source = _blFilter.GetTurnsByDate(filterDto.FromDate, filterDto.FromHour, filterDto.ToDate, filterDto.ToHour);
 

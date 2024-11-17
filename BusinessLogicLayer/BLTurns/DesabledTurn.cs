@@ -1,5 +1,4 @@
 ﻿using EntityModel.Turns.Interfaces;
-using DataAccessLayer;
 
 namespace BusinessLogicLayer.BLTurns
 {

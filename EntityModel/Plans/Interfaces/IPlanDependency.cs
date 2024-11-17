@@ -1,11 +1,4 @@
-﻿using EntityModel.Turns;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EntityModel.Plans.Interfaces
+﻿namespace EntityModel.Plans.Interfaces
 {
     public interface IPlanDependency
     {

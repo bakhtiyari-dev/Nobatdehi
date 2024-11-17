@@ -1,6 +1,5 @@
 ﻿using PresentationLayer.Validations;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PresentationLayer.DTO
 {

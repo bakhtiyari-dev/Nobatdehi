@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PresentationLayer.DTO;
-using System.Collections;
 
 namespace PresentationLayer.Controllers.Plans.Plan
 {

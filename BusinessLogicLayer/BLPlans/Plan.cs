@@ -1,12 +1,10 @@
-﻿using EntityModel.Plans.Interfaces;
-using DataAccessLayer;
-using EntityModel.Turns;
-using EntityModel.Turns.Interfaces;
+﻿using DataAccessLayer;
 using EntityModel.Plans;
+using EntityModel.Plans.Interfaces;
 
 namespace BusinessLogicLayer.BLPlans
 {
-    public class Plan:IPlan,IPlanDependency,IPlanCapacity
+    public class Plan : IPlan, IPlanDependency, IPlanCapacity
     {
         private DatabaseContext _dbContext = new DatabaseContext();
         private DataAccessLayer.DLPlans.Plan _dlPlan;

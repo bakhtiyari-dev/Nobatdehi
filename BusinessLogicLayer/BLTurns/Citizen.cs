@@ -1,9 +1,8 @@
 ﻿using EntityModel.Turns.Interfaces;
-using DataAccessLayer;
 
 namespace BusinessLogicLayer.BLTurns
 {
-    public class Citizen:ICitizen
+    public class Citizen : ICitizen
     {
         DataAccessLayer.DLTurns.Citizen _dlCitizen;
         public Citizen()

@@ -1,14 +1,13 @@
 ﻿using EntityModel.Turns.Interfaces;
-using DataAccessLayer;
 
 namespace BusinessLogicLayer.BLTurns
 {
-    public class AvailableTurn:IAvailableTurn
+    public class AvailableTurn : IAvailableTurn
     {
-        private DatabaseContext _dbContext = new DatabaseContext();
+        private DataAccessLayer.DLTurns.AvailableTurn _dlAvailable;
         public AvailableTurn()
         {
-            
+            _dlAvailable = new DataAccessLayer.DLTurns.AvailableTurn();
         }
 
         public void Create(EntityModel.Turns.AvailableTurn availableTurn)
