@@ -74,7 +74,9 @@ namespace PresentationLayer.Controllers.Offices.OfficeWorkPlan
 
                     _blWeek.Create(opo.Id, weekPlan);
 
-                    return Ok("WeekPlan Was Added Seccessfully" + Environment.NewLine + await _blPool.buldturns(opo));
+                    var turns = await _blPool.buldturns(opo);
+
+                    return Ok("WeekPlan Was Added Seccessfully" + Environment.NewLine + turns);
                 }
                 else
                 {

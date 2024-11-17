@@ -67,7 +67,7 @@ namespace DataAccessLayer.DLTurns
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -80,7 +80,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -93,7 +93,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -106,7 +106,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -119,7 +119,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -132,7 +132,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;
@@ -145,7 +145,7 @@ namespace DataAccessLayer.DLTurns
                             catch (Exception ex)
                             {
 
-                                throw new Exception(ex.ToString());
+                                return (ex.ToString());
                             }
 
                             break;

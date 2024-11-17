@@ -343,23 +343,23 @@ namespace PresentationLayer.Controllers.Turns.Turn
 
         // Turn Pool
 
-        //[HttpPost("TurnPool")]
-        //public async Task<IActionResult>? BuildAvailableTurns(int officeId, int planId)
-        //{
-        //    var opo = _blOpo.Get(officeId, planId);
+        [HttpPost("TurnPool")]
+        public async Task<IActionResult>? BuildAvailableTurns(int officeId, int planId)
+        {
+            var opo = _blOpo.Get(officeId, planId);
 
-        //    if (opo != null)
-        //    {
-        //        if (_blPool.isOpoExist(opo.Id))
-        //        {
-        //            _blPool.Delete(opo.Id);
-        //        }
+            if (opo != null)
+            {
+                if (_blPool.isOpoExist(opo.Id))
+                {
+                    _blPool.Delete(opo.Id);
+                }
 
-        //        return Ok(await _blPool.buldturns(opo));
-        //    }
+                return Ok(await _blPool.buldturns(opo));
+            }
 
-        //    return NotFound("OPO Was Not Found");
-        //}
+            return NotFound("OPO Was Not Found");
+        }
     }
 
 

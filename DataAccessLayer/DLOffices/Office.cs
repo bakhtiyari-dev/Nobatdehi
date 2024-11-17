@@ -56,9 +56,13 @@ namespace DataAccessLayer.DLOffices
         {
             var office = _dbContext.Offices.FirstOrDefault(o => o.Id == officeId);
 
-            office.Users.Add(user);
-            _dbContext.Update(office);
-            _dbContext.SaveChanges();
+            if (office != null)
+            {
+                office.Users.Add(user);
+                _dbContext.Update(office);
+                _dbContext.SaveChanges();
+            }
+
         }
     }
 }

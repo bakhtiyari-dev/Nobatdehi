@@ -27,7 +27,6 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
         [HttpGet("{officeId}/{planId}")]
         public EntityModel.Offices.OfficePlanOption? GetOfficePlanOption(int officeId, int planId)
         {
-            opoDto opoDto = new opoDto();
             return _blOfficePlanOption.Get(officeId, planId);
         }
 
@@ -61,7 +60,7 @@ namespace PresentationLayer.Controllers.Offices.OfficePlanOption
 
             if (_blOfficePlanOption.Get(officeId, planId) == null)
             {
-                if (office != null && plan != null)
+                if (office != null && office.Status != false && plan != null && plan.Status != false)
                 {
                     if (opo.FromDate >= planOption.FromDate && opo.ToDate <= planOption.ToDate)
                     {

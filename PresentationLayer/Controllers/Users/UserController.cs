@@ -34,27 +34,27 @@ namespace PresentationLayer.Controllers.Users
             _application = new BusinessLogicLayer.Application.ApplicationMethods();
         }
 
-        private string GenerateJwtToken(string username, string role)
-        {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        //private string GenerateJwtToken(string username, string role)
+        //{
+        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
+        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Role, role)
-        };
+        //    var claims = new List<Claim>
+        //{
+        //    new Claim(ClaimTypes.Name, username),
+        //    new Claim(ClaimTypes.Role, role)
+        //};
 
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JwtSettings:Issuer"],
-                audience: _configuration["JwtSettings:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: credentials
-            );
+        //    var token = new JwtSecurityToken(
+        //        issuer: _configuration["JwtSettings:Issuer"],
+        //        audience: _configuration["JwtSettings:Audience"],
+        //        claims: claims,
+        //        expires: DateTime.Now.AddHours(1),
+        //        signingCredentials: credentials
+        //    );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
 
         [HttpGet]
         public IActionResult GetAllUsers([FromQuery] PaginationDto pagination)
@@ -123,11 +123,11 @@ namespace PresentationLayer.Controllers.Users
 
                 await _userManager.AddToRoleAsync(user, model.Role);
 
-                var token = GenerateJwtToken(user.UserName, model.Role);
+                //var token = GenerateJwtToken(user.UserName, model.Role);
 
                 _blOffice.AddUser(model.OfficeId, user);
 
-                return Ok(new { message = $"User created successfully!\nId: {user.Id}\nToken: {token}" });
+                return Ok($"User created successfully!\nId: {user.Id}");
             }
 
             return NotFound("Office Id Was Not Found");
