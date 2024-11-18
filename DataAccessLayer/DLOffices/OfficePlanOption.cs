@@ -40,7 +40,7 @@ namespace DataAccessLayer.DLOffices
 
         public EntityModel.Offices.OfficePlanOption? Get(int officeId, int planId)
         {
-            var result = _databaseContext.OfficePlanOptions.FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
+            var result = _databaseContext.OfficePlanOptions.Include(o => o.Office).Include(p => p.Plan).FirstOrDefault(o => o.Office.Id == officeId && o.Plan.Id == planId);
 
             return result;
         }
