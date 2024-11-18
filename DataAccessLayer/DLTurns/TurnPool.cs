@@ -13,7 +13,7 @@ namespace DataAccessLayer.DLTurns
 
         public async Task AddAvailableTurns(TimeOnly startTime, TimeOnly endTime, DateOnly day, int timeGap, EntityModel.Turns.TurnPool turnPool)
         {
-            for (TimeOnly time = startTime; time < endTime; time = time.AddMinutes(timeGap))
+            for (TimeOnly time = startTime; time <= endTime; time = time.AddMinutes(timeGap))
             {
                 EntityModel.Turns.AvailableTurn availableTurn = new EntityModel.Turns.AvailableTurn()
                 {
